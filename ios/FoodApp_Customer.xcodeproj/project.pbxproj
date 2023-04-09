@@ -14,6 +14,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-FoodApp_Customer-FoodApp_CustomerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-FoodApp_Customer-FoodApp_CustomerTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9A6FC5DC5E4D4F02AF5892BF /* Ovo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 691AC72DAD3C402C800666B3 /* Ovo-Regular.ttf */; };
 		C2ED9F7F29E0104A0017D84F /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2ED9F6F29E010480017D84F /* FontAwesome5_Solid.ttf */; };
 		C2ED9F8029E0104A0017D84F /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2ED9F7029E010480017D84F /* EvilIcons.ttf */; };
 		C2ED9F8129E0104A0017D84F /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2ED9F7129E010480017D84F /* FontAwesome5_Brands.ttf */; };
@@ -30,7 +31,6 @@
 		C2ED9F8C29E0104A0017D84F /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2ED9F7C29E010490017D84F /* FontAwesome.ttf */; };
 		C2ED9F8D29E0104A0017D84F /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2ED9F7D29E0104A0017D84F /* MaterialCommunityIcons.ttf */; };
 		C2ED9F8E29E0104A0017D84F /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2ED9F7E29E0104A0017D84F /* SimpleLineIcons.ttf */; };
-		9A6FC5DC5E4D4F02AF5892BF /* Ovo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 691AC72DAD3C402C800666B3 /* Ovo-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +58,7 @@
 		5709B34CF0A7D63546082F79 /* Pods-FoodApp_Customer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodApp_Customer.release.xcconfig"; path = "Target Support Files/Pods-FoodApp_Customer/Pods-FoodApp_Customer.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-FoodApp_Customer-FoodApp_CustomerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodApp_Customer-FoodApp_CustomerTests.debug.xcconfig"; path = "Target Support Files/Pods-FoodApp_Customer-FoodApp_CustomerTests/Pods-FoodApp_Customer-FoodApp_CustomerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-FoodApp_Customer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FoodApp_Customer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		691AC72DAD3C402C800666B3 /* Ovo-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Ovo-Regular.ttf"; path = "../src/assets/fonts/Ovo-Regular.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = FoodApp_Customer/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-FoodApp_Customer-FoodApp_CustomerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodApp_Customer-FoodApp_CustomerTests.release.xcconfig"; path = "Target Support Files/Pods-FoodApp_Customer-FoodApp_CustomerTests/Pods-FoodApp_Customer-FoodApp_CustomerTests.release.xcconfig"; sourceTree = "<group>"; };
 		C2ED9F6F29E010480017D84F /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
@@ -77,7 +78,6 @@
 		C2ED9F7D29E0104A0017D84F /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		C2ED9F7E29E0104A0017D84F /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SimpleLineIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		691AC72DAD3C402C800666B3 /* Ovo-Regular.ttf */ = {isa = PBXFileReference; name = "Ovo-Regular.ttf"; path = "../src/assets/fonts/Ovo-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +139,15 @@
 				19F6CBCC0A4E27FBF8BF4A61 /* libPods-FoodApp_Customer-FoodApp_CustomerTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7B43732C1EEF4936A14A63B6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				691AC72DAD3C402C800666B3 /* Ovo-Regular.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -206,15 +215,6 @@
 			);
 			path = Fonts;
 			sourceTree = "<group>";
-		};
-		7B43732C1EEF4936A14A63B6 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				691AC72DAD3C402C800666B3 /* Ovo-Regular.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 

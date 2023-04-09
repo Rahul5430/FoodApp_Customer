@@ -1,4 +1,4 @@
-import * as Clipboard from 'expo-clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import React, {
 	forwardRef,
 	RefObject,
@@ -111,7 +111,7 @@ const OtpInputs = forwardRef<OtpInputsRef, Props>(
 					dispatch({ type: 'clearOtp', payload: numberOfInputs });
 					inputs.current.forEach((input) => input?.current?.clear());
 					previousCopiedText.current = '';
-					Clipboard.setStringAsync('');
+					Clipboard.setString('');
 				},
 				focus: (): void => {
 					const firstInput = inputs.current[0];
@@ -212,7 +212,7 @@ const OtpInputs = forwardRef<OtpInputsRef, Props>(
 		);
 
 		const listenOnCopiedText = useCallback(async (): Promise<void> => {
-			const copiedText = await Clipboard.getStringAsync();
+			const copiedText = await Clipboard.getString();
 			const otpCodeValue = Object.values(otpCode).join('');
 
 			if (
@@ -226,7 +226,7 @@ const OtpInputs = forwardRef<OtpInputsRef, Props>(
 		}, [fillInputs, numberOfInputs, otpCode]);
 
 		useEffect(() => {
-			let interval: NodeJS.Timeout;
+			let interval: number;
 
 			if (autofillFromClipboard) {
 				interval = setInterval(() => {
