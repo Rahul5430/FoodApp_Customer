@@ -1,16 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// import SearchLocationHeader from '../components/Headers/SearchLocationHeader';
-// import LocationScreen from '../screens/LocationScreen';
-// import OTPScreen from '../screens/OTPScreen';
-// import SearchLocation from '../screens/SearchLocation';
-// import SigninScreen from '../screens/SigninScreen';
-// import SignupScreen from '../screens/SignupScreen';
-// import VendorSignUpScreen from '../screens/VendorSignUpScreen';
+import LocationScreen from '../screens/LocationScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
-// import { colors } from '../themes';
+import { WelcomeStackParamList } from '../types/navigation';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<WelcomeStackParamList>();
 
 const WelcomeNavigator = () => {
 	return (
@@ -19,29 +13,8 @@ const WelcomeNavigator = () => {
 				headerShown: false,
 			}}
 		>
-			<Stack.Screen name='welcomeScreen' component={WelcomeScreen} />
-			{/* <Stack.Screen name='signin' component={SigninScreen} /> */}
-			{/* <Stack.Screen name='signup' component={SignupScreen} /> */}
-			{/* <Stack.Screen name='vendorSignup' component={VendorSignUpScreen} />
-			<Stack.Screen
-				name='otp'
-				component={OTPScreen}
-				options={{
-					headerShown: true,
-					title: 'Back',
-					headerTintColor: colors.headerOrange,
-					headerTitleAlign: 'left',
-				}}
-			/>
-			<Stack.Screen name='locationScreen' component={LocationScreen} />
-			<Stack.Screen
-				name='searchLocation'
-				component={SearchLocation}
-				options={{
-					headerShown: true,
-					header: () => <SearchLocationHeader />,
-				}}
-			/> */}
+			<Stack.Screen name='LocationScreen' component={LocationScreen} />
+			<Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
 		</Stack.Navigator>
 	);
 };

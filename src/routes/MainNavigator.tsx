@@ -2,11 +2,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
 
 import { RootState } from '../store/store';
-// import DrawerNavigator from './DrawerNavigator';
+import { MainStackParamList } from '../types/navigation';
 import LoadingNavigator from './LoadingNavigator';
 import WelcomeNavigator from './WelcomeNavigator';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<MainStackParamList>();
 
 const MainNavigator = () => {
 	const { isLoggedIn } = useSelector((state: RootState) => state.user);
@@ -17,14 +17,17 @@ const MainNavigator = () => {
 				headerShown: false,
 			}}
 		>
-			{/* {isLoggedIn && (
-				<Stack.Screen name='dashboard' component={DrawerNavigator} />
-			)} */}
 			{isLoggedIn === false && (
-				<Stack.Screen name='welcome' component={WelcomeNavigator} />
+				<Stack.Screen
+					name='WelcomeStack'
+					component={WelcomeNavigator}
+				/>
 			)}
 			{isLoggedIn === null && (
-				<Stack.Screen name='loading' component={LoadingNavigator} />
+				<Stack.Screen
+					name='LoadingStack'
+					component={LoadingNavigator}
+				/>
 			)}
 		</Stack.Navigator>
 	);

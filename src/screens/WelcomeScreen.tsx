@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { RefObject, useEffect, useRef, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import React, {
+	RefObject,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import {
+	BackHandler,
 	Image,
 	ImageBackground,
 	KeyboardAvoidingView,
@@ -22,6 +30,7 @@ import OtpInputs from '../components/OTPInputs';
 import { getWidthnHeight, RFValue } from '../helpers/responsiveFontSize';
 import { validateEmail, validatePhone } from '../helpers/utils';
 import { colors } from '../themes';
+import { WelcomeStackScreenProps } from '../types/navigation';
 
 type DetailsError = {
 	phone: string;
@@ -32,7 +41,9 @@ type DetailsError = {
 
 const CORRECT_OTP = '123456';
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({
+	navigation,
+}: WelcomeStackScreenProps<'WelcomeScreen'>) => {
 	const [error, setError] = useState<DetailsError>({
 		phone: '',
 		otp: '',
@@ -72,6 +83,7 @@ const WelcomeScreen = () => {
 				if (error.otp) {
 					setError({ ...error, otp: '' });
 				}
+				setOtp('');
 				if (newUser) {
 					setStep(2);
 				}
@@ -80,14 +92,14 @@ const WelcomeScreen = () => {
 			}
 		} else if (step === 2) {
 			if (userName) {
-				if (userEmail && validateEmail(userEmail)) {
-					setError({ ...error, name: '', email: '' });
-					setStep(3);
-				} else {
+				if (userEmail && !validateEmail(userEmail)) {
 					setError({
 						...error,
 						email: 'Please enter valid email',
 					});
+				} else {
+					setError({ ...error, name: '', email: '' });
+					navigation.navigate('LocationScreen');
 				}
 			} else {
 				setError({
@@ -95,8 +107,6 @@ const WelcomeScreen = () => {
 					name: 'Please enter your name',
 				});
 			}
-		} else if (step === 3) {
-			setStep(4);
 		}
 	};
 
@@ -114,6 +124,26 @@ const WelcomeScreen = () => {
 			}
 		}
 	}, [error.otp, otp]);
+
+	useFocusEffect(
+		useCallback(() => {
+			const onBackPress = () => {
+				if (step > 0) {
+					setStep(0);
+					return true;
+				} else {
+					return false;
+				}
+			};
+
+			const subscription = BackHandler.addEventListener(
+				'hardwareBackPress',
+				onBackPress
+			);
+
+			return () => subscription.remove();
+		}, [step])
+	);
 
 	return (
 		<View style={{ flexGrow: 1 }}>
