@@ -36,6 +36,7 @@ type Props = TextInputProps & {
 	keyboardType?: SupportedKeyboardType;
 	style?: StyleProp<ViewStyle>;
 	focusStyles?: StyleProp<ViewStyle>;
+	activeStyles?: StyleProp<ViewStyle>;
 	defaultValue?: string;
 	handleChange: (otpCode: string) => void;
 	inputContainerStyles?: StyleProp<ViewStyle>;
@@ -64,6 +65,7 @@ const OtpInputs = forwardRef<OtpInputsRef, Props>(
 			clearTextOnFocus = false,
 			defaultValue,
 			focusStyles,
+			activeStyles,
 			handleChange = console.log,
 			inputContainerStyles,
 			inputStyles,
@@ -267,6 +269,7 @@ const OtpInputs = forwardRef<OtpInputsRef, Props>(
 						clearTextOnFocus={clearTextOnFocus}
 						firstInput={index === 0}
 						focusStyles={focusStyles}
+						activeStyles={activeStyles}
 						handleKeyPress={(
 							keyPressEvent: NativeSyntheticEvent<TextInputKeyPressEventData>
 						) => handleKeyPress(keyPressEvent, inputIndex)}
@@ -298,4 +301,5 @@ const OtpInputs = forwardRef<OtpInputsRef, Props>(
 	}
 );
 
+export type { OtpInputsRef };
 export default OtpInputs;

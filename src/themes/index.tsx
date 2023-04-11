@@ -1,4 +1,5 @@
 export const colors = {
+	primaryRed: '#FF1647',
 	darkRed: '#6C001F',
 	lightInputGrey: '#919191',
 	primaryButton: '#E6265d',

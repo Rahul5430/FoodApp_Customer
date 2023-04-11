@@ -20,6 +20,7 @@ type Props = TextInputProps & {
 	inputContainerStyles?: StyleProp<ViewStyle>;
 	firstInput: boolean;
 	focusStyles?: StyleProp<ViewStyle>;
+	activeStyles?: StyleProp<ViewStyle>;
 	inputStyles?: StyleProp<ViewStyle>;
 	numberOfInputs: number;
 	handleTextChange: (text: string) => void;
@@ -37,6 +38,7 @@ const OtpInput = forwardRef<TextInput, Props>(
 		{
 			autoFocus,
 			focusStyles,
+			activeStyles,
 			handleKeyPress,
 			handleTextChange,
 			inputContainerStyles,
@@ -50,6 +52,7 @@ const OtpInput = forwardRef<TextInput, Props>(
 		ref
 	) => {
 		const [focused, setFocused] = useState(false);
+		const [active, setActive] = useState(false);
 
 		useEffect(() => {
 			(ref as RefObject<TextInput>)?.current?.setNativeProps({
@@ -69,12 +72,30 @@ const OtpInput = forwardRef<TextInput, Props>(
 		);
 
 		return (
-			<View style={[inputContainerStyles, focused && focusStyles]}>
+			<View
+				style={[
+					inputContainerStyles,
+					focused && focusStyles,
+					active && activeStyles,
+				]}
+			>
 				<TextInput
 					autoFocus={autoFocus}
 					onBlur={() => setFocused(false)}
-					onChangeText={handleTextChange}
-					onFocus={() => setFocused(true)}
+					onChangeText={(text) => {
+						if (text.length > 0) {
+							setActive(true);
+						} else {
+							setActive(false);
+						}
+						handleTextChange(text);
+					}}
+					onFocus={(e) => {
+						if (restProps.onFocus) {
+							restProps.onFocus(e);
+						}
+						setFocused(true);
+					}}
 					onKeyPress={handleKeyPress}
 					placeholder={placeholder}
 					ref={ref}
