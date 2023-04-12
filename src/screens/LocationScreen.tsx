@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import Geolocation from '@react-native-community/geolocation';
+import { useEffect, useRef, useState } from 'react';
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -7,7 +8,10 @@ import {
 	Text,
 	View,
 } from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { Button, Searchbar } from 'react-native-paper';
+import Toast from 'react-native-root-toast';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,15 +22,50 @@ import { colors } from '../themes';
 import { WelcomeStackScreenProps } from '../types/navigation';
 
 const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
+	const { top, bottom } = useSafeAreaInsets();
+
+	const [middleViewHeight, setMiddleViewHeight] = useState(0);
 	const [searchText, setSearchText] = useState('');
+	const [coords, setCoords] = useState<Region>({
+		latitude: 30.709597189331838,
+		longitude: 76.68947006872848,
+		latitudeDelta: 0.015,
+		longitudeDelta: 0.0121,
+	});
+
+	const mapRef = useRef<MapView>(null);
 
 	const getCurrentLocation = () => {
 		console.log('getCurrentLocation');
+		Geolocation.getCurrentPosition(
+			(pos) => {
+				console.log(pos.coords);
+				setCoords({
+					...coords,
+					latitude: pos.coords.latitude,
+					longitude: pos.coords.longitude,
+				});
+				mapRef.current?.animateToRegion({
+					...coords,
+					latitude: pos.coords.latitude,
+					longitude: pos.coords.longitude,
+				});
+			},
+			(error) => Toast.show(error.message)
+		);
 	};
 
 	const skip = () => {
 		console.log('skip');
 	};
+
+	const onRegionChangeComplete = (region: Region) => {
+		console.log('onRegionChangeComplete: ', region);
+	};
+
+	useEffect(() => {
+		getCurrentLocation();
+	}, []);
 
 	return (
 		<View style={{ flexGrow: 1 }}>
@@ -45,7 +84,14 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 					contentContainerStyle={{ flexGrow: 1 }}
 					keyboardShouldPersistTaps='handled'
 				>
-					<View style={styles.topBox}>
+					<View
+						style={[
+							styles.topBox,
+							{
+								marginTop: top + getWidthnHeight(100, 3).height,
+							},
+						]}
+					>
 						<View style={{ flexDirection: 'row' }}>
 							<Ionicons
 								name='chevron-back-circle'
@@ -66,6 +112,7 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 									/>
 								)}
 								style={{
+									flex: 1,
 									flexGrow: 1,
 									backgroundColor: 'white',
 									borderRadius: 9,
@@ -75,8 +122,67 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 							/>
 						</View>
 					</View>
-					<View style={{ flexGrow: 1 }}></View>
-					<View style={styles.bottomBox}>
+					<View
+						style={[
+							StyleSheet.absoluteFill,
+							getWidthnHeight(100, 100, 'screen'),
+							{ justifyContent: 'center', alignItems: 'center' },
+						]}
+					>
+						<MapView
+							ref={mapRef}
+							provider={PROVIDER_GOOGLE}
+							style={[StyleSheet.absoluteFillObject]}
+							initialRegion={coords}
+							onRegionChangeComplete={onRegionChangeComplete}
+							showsUserLocation={true}
+							showsMyLocationButton={false}
+						/>
+						<View style={styles.markerFixed} pointerEvents='none'>
+							<Text
+								style={[
+									styles.markerText,
+									{ fontWeight: 'bold' },
+								]}
+							>
+								Current Location
+							</Text>
+							<Text style={[styles.markerText]}>
+								Industrial Area, Sector 74, Sahibzada Ajit Singh
+								Nagar, Punjab 160055
+							</Text>
+						</View>
+						<View
+							style={{
+								position: 'absolute',
+								borderRadius: 9,
+								bottom: '50%',
+								left: getWidthnHeight(47.5).width,
+							}}
+							pointerEvents='none'
+						>
+							<View style={[styles.TriangleShapeCSS]} />
+						</View>
+					</View>
+					<View
+						onLayout={(e) => {
+							const { height } = e.nativeEvent.layout;
+							setMiddleViewHeight(height);
+						}}
+						style={{ flexGrow: 1, height: middleViewHeight }}
+						pointerEvents='none'
+					/>
+					<View
+						style={[
+							styles.bottomBox,
+							{
+								paddingBottom:
+									bottom < getWidthnHeight(3).width
+										? getWidthnHeight(3).width
+										: bottom,
+							},
+						]}
+					>
 						<View
 							style={{
 								flexDirection: 'row',
@@ -86,7 +192,7 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 						>
 							<FontAwesome5
 								name='map-marker-alt'
-								size={getWidthnHeight(12).width}
+								size={getWidthnHeight(10).width}
 								color={colors.primaryRed}
 							/>
 							<View
@@ -164,11 +270,34 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 
 const styles = StyleSheet.create({
 	topBox: {
-		position: 'absolute',
 		width: getWidthnHeight(90).width,
 		marginHorizontal: getWidthnHeight(5).width,
-		marginTop: getWidthnHeight(100, 7).height,
 		zIndex: 999,
+	},
+	markerFixed: {
+		position: 'absolute',
+		backgroundColor: colors.lightBlack,
+		paddingVertical: getWidthnHeight(2.2).width,
+		paddingHorizontal: getWidthnHeight(4).width,
+		marginHorizontal: getWidthnHeight(4).width,
+		borderRadius: 9,
+		bottom: '51%',
+	},
+	markerText: {
+		color: 'white',
+		fontSize: getWidthnHeight(3.7).width,
+	},
+	TriangleShapeCSS: {
+		width: 0,
+		height: 0,
+		borderLeftWidth: getWidthnHeight(2).width,
+		borderRightWidth: getWidthnHeight(2).width,
+		borderTopWidth: getWidthnHeight(4).width,
+		borderStyle: 'solid',
+		backgroundColor: 'transparent',
+		borderLeftColor: 'transparent',
+		borderRightColor: 'transparent',
+		borderTopColor: colors.lightBlack,
 	},
 	bottomBox: {
 		backgroundColor: 'white',

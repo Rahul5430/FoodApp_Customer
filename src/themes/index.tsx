@@ -14,4 +14,5 @@ export const colors = {
 	golden: '#EBB55F',
 	pink: '#FFC0CB',
 	orange: '#FFA500',
+	lightBlack: '#343A40',
 };

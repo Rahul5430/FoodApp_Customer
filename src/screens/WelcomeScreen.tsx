@@ -50,7 +50,7 @@ const WelcomeScreen = ({
 		name: '',
 		email: '',
 	});
-	const [userPhone, setUserPhone] = useState('1234567890');
+	const [userPhone, setUserPhone] = useState('');
 	const [userName, setUserName] = useState('');
 	const [userEmail, setUserEmail] = useState('');
 	const [otp, setOtp] = useState('');
@@ -209,7 +209,7 @@ const WelcomeScreen = ({
 									setUserPhone(text);
 								}}
 								variant='standard'
-								label='Mobile number'
+								label=''
 								placeholder='Enter your number'
 								leadingContainerStyle={{ width: 30 }}
 								style={{
@@ -311,7 +311,7 @@ const WelcomeScreen = ({
 										setUserName(text);
 									}}
 									variant='standard'
-									label='Your Name'
+									label=''
 									placeholder='Enter your name'
 									style={{
 										marginTop: getWidthnHeight(10).width,
@@ -358,8 +358,8 @@ const WelcomeScreen = ({
 										setUserEmail(text);
 									}}
 									variant='standard'
-									label='Your Email (optional)'
-									placeholder='Enter your email'
+									label=''
+									placeholder='Enter your email (optional)'
 									style={{
 										marginVertical:
 											getWidthnHeight(10).width,

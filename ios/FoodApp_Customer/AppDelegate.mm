@@ -3,10 +3,12 @@
 
 #import <React/RCTBundleURLProvider.h>
 
+#import <GoogleMaps/GoogleMaps.h>
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyCIbnVIV46jXmU4_k5bHyMv1xCcKZv41I0"];
   [FIRApp configure];
   self.moduleName = @"FoodApp_Customer";
   // You can add your custom initial props in the dictionary below.
