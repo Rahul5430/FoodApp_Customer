@@ -1,10 +1,10 @@
 import { Platform } from 'react-native';
 
 export const colors = {
-	primaryRed: '#FF1647',
+	primaryRed: '#FF2C58',
+	primaryButton: '#FF1647',
 	darkRed: '#6C001F',
 	lightInputGrey: '#919191',
-	primaryButton: '#E6265d',
 	secondaryButton: '#315991',
 	lightInput: '#F4F4F4',
 	headerOrange: '#F37965',
@@ -24,10 +24,16 @@ export const fonts = {
 		ios: {
 			Ovo: 'Ovo',
 			Pattaya: 'Pattaya-Regular',
+			Oxygen: 'Oxygen-Regular',
+			OxygenLight: 'Oxygen-Light',
+			OxygenBold: 'Oxygen-Bold',
 		},
 		android: {
 			Ovo: 'Ovo-Regular',
 			Pattaya: 'Pattaya-Regular',
+			Oxygen: 'Oxygen-Regular',
+			OxygenLight: 'Oxygen-Light',
+			OxygenBold: 'Oxygen-Bold',
 		},
 	}),
 };

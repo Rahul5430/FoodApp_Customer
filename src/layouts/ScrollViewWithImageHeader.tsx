@@ -2,6 +2,10 @@ import React from 'react';
 import {
 	Animated,
 	ImageBackground,
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	ScrollViewProps,
 	StatusBarProps,
 	StyleProp,
 	StyleSheet,
@@ -23,6 +27,7 @@ type ScrollViewWithImageHeaderProps = {
 	titleStyle?: StyleProp<TextStyle>;
 	containerStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
 	statusBarProps?: StatusBarProps;
+	scrollViewProps?: ScrollViewProps;
 };
 
 const ScrollViewWithImageHeader = ({
@@ -31,6 +36,7 @@ const ScrollViewWithImageHeader = ({
 	titleStyle,
 	containerStyle,
 	statusBarProps,
+	scrollViewProps,
 }: ScrollViewWithImageHeaderProps) => {
 	const screenWidth = getWidthnHeight(100).width;
 	const aspectRatio = 237 / 428;
@@ -50,34 +56,51 @@ const ScrollViewWithImageHeader = ({
 				hidden={false}
 				{...statusBarProps}
 			/>
-			<ImageBackground
-				source={require('../assets/cakebanner.png')}
-				style={{
-					width: screenWidth,
-					height: imageHeight,
-					justifyContent: 'center',
-				}}
+			<KeyboardAvoidingView
+				style={{ flexGrow: 1 }}
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			>
-				<Text style={[styles.heading, titleStyle]}>{title}</Text>
-			</ImageBackground>
-			<Surface
-				style={[
-					styles.container,
-					{
-						marginBottom: bottomSafeAreaInset,
-						paddingBottom: bottomSafeAreaInset,
-						height: getWidthnHeight(
-							100,
-							100 - imageHeightPercent - 7,
-							'screen'
-						).height,
-					},
-					containerStyle,
-				]}
-				elevation={2}
-			>
-				{children}
-			</Surface>
+				<ScrollView
+					contentContainerStyle={[
+						{ flexGrow: 1 },
+						scrollViewProps &&
+							scrollViewProps.contentContainerStyle,
+					]}
+					keyboardShouldPersistTaps='handled'
+					{...scrollViewProps}
+				>
+					<ImageBackground
+						source={require('../assets/cakebanner.png')}
+						style={{
+							width: screenWidth,
+							height: imageHeight,
+							justifyContent: 'center',
+						}}
+					>
+						<Text style={[styles.heading, titleStyle]}>
+							{title}
+						</Text>
+					</ImageBackground>
+					<Surface
+						style={[
+							styles.container,
+							{
+								marginBottom: bottomSafeAreaInset,
+								paddingBottom: bottomSafeAreaInset,
+								minHeight: getWidthnHeight(
+									100,
+									100 - imageHeightPercent - 10,
+									'screen'
+								).height,
+							},
+							containerStyle,
+						]}
+						elevation={2}
+					>
+						{children}
+					</Surface>
+				</ScrollView>
+			</KeyboardAvoidingView>
 		</View>
 	);
 };

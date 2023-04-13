@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -59,6 +60,7 @@ const LocationScreen: React.FC<
 					longitude: pos.coords.longitude,
 				});
 				dispatch(setLoggedIn(true));
+				AsyncStorage.setItem('token', JSON.stringify({}));
 			},
 			(error) => Toast.show(error.message)
 		);
@@ -245,7 +247,7 @@ const LocationScreen: React.FC<
 									},
 								]}
 								onPress={getCurrentLocation}
-								buttonColor={colors.primaryRed}
+								buttonColor={colors.primaryButton}
 								labelStyle={styles.btnText}
 							>
 								Use Current Location
@@ -261,7 +263,7 @@ const LocationScreen: React.FC<
 									<Ionicons
 										name='chevron-forward-circle'
 										size={getWidthnHeight(6).width}
-										color={colors.primaryRed}
+										color={colors.primaryButton}
 									/>
 								)}
 								labelStyle={styles.btnText}

@@ -24,7 +24,7 @@ import MaterialTextInput from '../components/MaterialTextInput/MaterialTextInput
 import OtpInputs from '../components/OTPInputs';
 import { getWidthnHeight, RFValue } from '../helpers/responsiveFontSize';
 import { validateEmail, validatePhone } from '../helpers/utils';
-import ScreenWithImageHeader from '../layouts/ScreenWithImageHeader';
+import ScrollViewWithImageHeader from '../layouts/ScrollViewWithImageHeader';
 import { colors, fonts } from '../themes';
 import { WelcomeStackScreenProps } from '../types/navigation';
 
@@ -138,7 +138,7 @@ const WelcomeScreen = ({
 	);
 
 	return (
-		<ScreenWithImageHeader title={"Baker's in"}>
+		<ScrollViewWithImageHeader title={"Baker's in"}>
 			<View style={styles.avatar}>
 				<Image source={CartoonUser} style={styles.image} />
 			</View>
@@ -160,7 +160,7 @@ const WelcomeScreen = ({
 				<MaterialCommunityIcons
 					name='hand-wave'
 					size={getWidthnHeight(7).width}
-					color={colors.primaryRed}
+					color={colors.primaryButton}
 					style={{ paddingLeft: 10 }}
 				/>
 			</View>
@@ -380,12 +380,12 @@ const WelcomeScreen = ({
 					textAlignVertical: 'center',
 				}}
 				onPress={handleOnPress}
-				buttonColor={colors.primaryRed}
+				buttonColor={colors.primaryButton}
 				disabled={step === 1 && (!!error.otp || otp.length < 6)}
 			>
 				Continue
 			</Button>
-		</ScreenWithImageHeader>
+		</ScrollViewWithImageHeader>
 	);
 };
 
