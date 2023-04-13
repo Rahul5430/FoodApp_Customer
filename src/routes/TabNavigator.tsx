@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import {
 	Alert,
 	Animated,
@@ -6,14 +7,14 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+
 import { CurvedBottomBar } from '../components/CurvedBottomBar';
-import LocationScreen from '../screens/LocationScreen';
+import TabHeader from '../components/Headers/TabHeader';
 import HomeScreen from '../screens/HomeScreen';
+import LocationScreen from '../screens/LocationScreen';
 // import SearchScreen from '../screens/SearchScreen';
 import OrdersScreen from '../screens/OrdersScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import TabHeader from '../components/Headers/TabHeader';
 import { colors } from '../themes';
 
 const TabNavigator = () => {

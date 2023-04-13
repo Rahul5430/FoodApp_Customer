@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 export const colors = {
 	primaryRed: '#FF1647',
 	darkRed: '#6C001F',
@@ -15,4 +17,17 @@ export const colors = {
 	pink: '#FFC0CB',
 	orange: '#FFA500',
 	lightBlack: '#343A40',
+};
+
+export const fonts = {
+	...Platform.select({
+		ios: {
+			Ovo: 'Ovo',
+			Pattaya: 'Pattaya-Regular',
+		},
+		android: {
+			Ovo: 'Ovo-Regular',
+			Pattaya: 'Pattaya-Regular',
+		},
+	}),
 };

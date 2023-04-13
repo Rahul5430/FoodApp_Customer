@@ -10,26 +10,22 @@ import React, {
 import {
 	BackHandler,
 	Image,
-	ImageBackground,
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
 	StyleSheet,
 	Text,
 	TextInput,
 	View,
 } from 'react-native';
-import { Button, Surface } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import Toast from 'react-native-root-toast';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import CartoonUser from '../assets/cartoonuser.png';
-import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import MaterialTextInput from '../components/MaterialTextInput/MaterialTextInput';
 import OtpInputs from '../components/OTPInputs';
 import { getWidthnHeight, RFValue } from '../helpers/responsiveFontSize';
 import { validateEmail, validatePhone } from '../helpers/utils';
-import { colors } from '../themes';
+import ScreenWithImageHeader from '../layouts/ScreenWithImageHeader';
+import { colors, fonts } from '../themes';
 import { WelcomeStackScreenProps } from '../types/navigation';
 
 type DetailsError = {
@@ -50,7 +46,7 @@ const WelcomeScreen = ({
 		name: '',
 		email: '',
 	});
-	const [userPhone, setUserPhone] = useState('');
+	const [userPhone, setUserPhone] = useState('1234567890');
 	const [userName, setUserName] = useState('');
 	const [userEmail, setUserEmail] = useState('');
 	const [otp, setOtp] = useState('');
@@ -60,10 +56,6 @@ const WelcomeScreen = ({
 	// @ts-ignore
 	const otpRef: RefObject<OtpInputs> = useRef();
 	const emailRef = useRef<TextInput>(null);
-
-	const screenWidth = getWidthnHeight(100).width;
-	const aspectRatio = 237 / 428;
-	const imageHeight = aspectRatio * screenWidth;
 
 	const handleOnPress = () => {
 		if (step === 0) {
@@ -146,304 +138,284 @@ const WelcomeScreen = ({
 	);
 
 	return (
-		<View style={{ flexGrow: 1 }}>
-			<FocusAwareStatusBar
-				barStyle='light-content'
-				translucent={true}
-				backgroundColor={'transparent'}
-				hidden={false}
-			/>
-			<KeyboardAvoidingView
-				style={{ flexGrow: 1 }}
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+		<ScreenWithImageHeader title={"Baker's in"}>
+			<View style={styles.avatar}>
+				<Image source={CartoonUser} style={styles.image} />
+			</View>
+			<View
+				style={{
+					flexDirection: 'row',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
 			>
-				<ScrollView
-					contentContainerStyle={{ flexGrow: 1 }}
-					keyboardShouldPersistTaps='handled'
+				<Text
+					style={[
+						styles.text,
+						{ marginTop: getWidthnHeight(3).width },
+					]}
 				>
-					<ImageBackground
-						source={require('../assets/cakebanner.png')}
-						style={{
-							width: screenWidth,
-							height: imageHeight,
-							justifyContent: 'center',
-						}}
-					>
-						<Text style={styles.heading}>{"Baker's in"}</Text>
-					</ImageBackground>
-					<Surface style={styles.container} elevation={2}>
-						<View style={styles.avatar}>
-							<Image source={CartoonUser} style={styles.image} />
-						</View>
-						<View
+					Hi.
+				</Text>
+				<MaterialCommunityIcons
+					name='hand-wave'
+					size={getWidthnHeight(7).width}
+					color={colors.primaryRed}
+					style={{ paddingLeft: 10 }}
+				/>
+			</View>
+			<Text
+				style={[
+					styles.text,
+					{ marginVertical: getWidthnHeight(3).width },
+				]}
+			>
+				{"Let's get started"}
+			</Text>
+			{step === 0 && (
+				<MaterialTextInput
+					value={userPhone}
+					onChangeText={(text: string) => {
+						if (!validatePhone(text)) {
+							setError({
+								...error,
+								phone: 'Please enter valid phone number',
+							});
+						} else {
+							setError({
+								...error,
+								phone: '',
+							});
+						}
+						setUserPhone(text);
+					}}
+					variant='standard'
+					label=''
+					placeholder='Enter your number'
+					leadingContainerStyle={{
+						width: 40,
+						borderRightWidth: 1,
+						paddingRight: getWidthnHeight(2).width,
+					}}
+					style={{
+						marginTop: getWidthnHeight(8).width,
+						marginBottom: getWidthnHeight(10).width,
+					}}
+					leading={
+						<Text
 							style={{
-								flexDirection: 'row',
-								justifyContent: 'center',
-								alignItems: 'center',
+								fontFamily: fonts.Ovo,
+								fontSize: RFValue(18),
+								color: 'black',
 							}}
+							adjustsFontSizeToFit
+							numberOfLines={1}
 						>
-							<Text style={styles.text}>Hi.</Text>
-							<MaterialCommunityIcons
-								name='hand-wave'
-								size={getWidthnHeight(5).width}
-								color={colors.primaryRed}
-								style={{ paddingLeft: 10 }}
-							/>
-						</View>
-						<Text style={styles.text}>{"Let's get started"}</Text>
-						{step === 0 && (
-							<MaterialTextInput
-								value={userPhone}
-								onChangeText={(text: string) => {
-									if (!validatePhone(text)) {
-										setError({
-											...error,
-											phone: 'Please enter valid phone number',
-										});
-									} else {
-										setError({
-											...error,
-											phone: '',
-										});
-									}
-									setUserPhone(text);
-								}}
-								variant='standard'
-								label=''
-								placeholder='Enter your number'
-								leadingContainerStyle={{ width: 30 }}
-								style={{
-									marginVertical: getWidthnHeight(10).width,
-								}}
-								leading={
-									<Text
-										style={{
-											fontFamily: 'Ovo',
-											fontSize: RFValue(16),
-											color: 'black',
-										}}
-										adjustsFontSizeToFit
-										numberOfLines={1}
-									>
-										+91
-									</Text>
-								}
-								helperText={error.phone}
-								autoComplete='tel'
-								inputMode='numeric'
-								keyboardType='numeric'
-								textContentType='telephoneNumber'
-								onEndEditing={({ nativeEvent }) => {
-									if (!validatePhone(nativeEvent.text)) {
-										setError({
-											...error,
-											phone: 'Please enter valid phone number',
-										});
-									} else {
-										setError({
-											...error,
-											phone: '',
-										});
-									}
-								}}
-							/>
-						)}
-						{step === 1 && (
-							<View
-								style={{
-									marginVertical: getWidthnHeight(10).width,
-								}}
-							>
-								<Text style={styles.otpHeading}>
-									Enter The Otp
-								</Text>
-								<OtpInputs
-									ref={otpRef}
-									handleChange={(code: string) =>
-										otpCodeChanged(code)
-									}
-									numberOfInputs={6}
-									keyboardType='numeric'
-									focusStyles={styles.otpInputFocused}
-									activeStyles={styles.otpInputActive}
-									inputContainerStyles={[
-										styles.otpInputContainer,
-										!!error.otp &&
-											otp.length === 6 && {
-												borderRadius: 10,
-												backgroundColor: 'red',
-												borderBottomWidth: 0,
-											},
-									]}
-									inputStyles={[
-										styles.otpInput,
-										!!error.otp &&
-											otp.length === 6 && {
-												color: 'white',
-											},
-									]}
-									style={styles.otp}
-									onFocus={() => {
-										if (error.otp) {
-											otpRef.current.reset();
-											setError({ ...error, otp: '' });
-										}
-									}}
-								/>
-							</View>
-						)}
-						{step === 2 && (
-							<React.Fragment>
-								<MaterialTextInput
-									value={userName}
-									onChangeText={(text: string) => {
-										if (!text) {
-											setError({
-												...error,
-												name: 'Please enter your name',
-											});
-										} else {
-											setError({
-												...error,
-												name: '',
-											});
-										}
-										setUserName(text);
-									}}
-									variant='standard'
-									label=''
-									placeholder='Enter your name'
-									style={{
-										marginTop: getWidthnHeight(10).width,
-									}}
-									helperText={error.name}
-									autoComplete='name'
-									inputMode='text'
-									keyboardType='default'
-									textContentType='name'
-									returnKeyType='next'
-									blurOnSubmit={false}
-									onSubmitEditing={() =>
-										emailRef.current?.focus()
-									}
-									onEndEditing={({ nativeEvent }) => {
-										if (!nativeEvent.text) {
-											setError({
-												...error,
-												name: 'Please enter your name',
-											});
-										} else {
-											setError({
-												...error,
-												name: '',
-											});
-										}
-									}}
-								/>
-								<MaterialTextInput
-									ref={emailRef}
-									value={userEmail}
-									onChangeText={(text: string) => {
-										if (text && !validateEmail(text)) {
-											setError({
-												...error,
-												email: 'Please enter valid email',
-											});
-										} else {
-											setError({
-												...error,
-												email: '',
-											});
-										}
-										setUserEmail(text);
-									}}
-									variant='standard'
-									label=''
-									placeholder='Enter your email (optional)'
-									style={{
-										marginVertical:
-											getWidthnHeight(10).width,
-									}}
-									helperText={error.email}
-									autoComplete='email'
-									inputMode='email'
-									keyboardType='email-address'
-									textContentType='emailAddress'
-									onEndEditing={({ nativeEvent }) => {
-										if (
-											nativeEvent.text &&
-											!validateEmail(nativeEvent.text)
-										) {
-											setError({
-												...error,
-												email: 'Please enter valid email',
-											});
-										} else {
-											setError({
-												...error,
-												email: '',
-											});
-										}
-									}}
-								/>
-							</React.Fragment>
-						)}
-						<Button
-							mode='contained'
-							style={styles.button}
-							onPress={handleOnPress}
-							buttonColor={colors.primaryRed}
-							disabled={
-								step === 1 && (!!error.otp || otp.length < 6)
+							+91
+						</Text>
+					}
+					helperText={error.phone}
+					autoComplete='tel'
+					inputMode='numeric'
+					keyboardType='numeric'
+					textContentType='telephoneNumber'
+					onEndEditing={({ nativeEvent }) => {
+						if (!validatePhone(nativeEvent.text)) {
+							setError({
+								...error,
+								phone: 'Please enter valid phone number',
+							});
+						} else {
+							setError({
+								...error,
+								phone: '',
+							});
+						}
+					}}
+				/>
+			)}
+			{step === 1 && (
+				<View
+					style={{
+						marginVertical: getWidthnHeight(10).width,
+					}}
+				>
+					<Text style={styles.otpHeading}>Enter The Otp</Text>
+					<OtpInputs
+						ref={otpRef}
+						handleChange={(code: string) => otpCodeChanged(code)}
+						numberOfInputs={6}
+						keyboardType='numeric'
+						focusStyles={styles.otpInputFocused}
+						activeStyles={styles.otpInputActive}
+						inputContainerStyles={[
+							styles.otpInputContainer,
+							!!error.otp &&
+								otp.length === 6 && {
+									borderRadius: 10,
+									backgroundColor: 'red',
+									borderBottomWidth: 0,
+								},
+						]}
+						inputStyles={[
+							styles.otpInput,
+							!!error.otp &&
+								otp.length === 6 && {
+									color: 'white',
+								},
+						]}
+						style={styles.otp}
+						onFocus={() => {
+							if (error.otp) {
+								otpRef.current.reset();
+								setError({ ...error, otp: '' });
 							}
-						>
-							Continue
-						</Button>
-					</Surface>
-				</ScrollView>
-			</KeyboardAvoidingView>
-		</View>
+						}}
+					/>
+				</View>
+			)}
+			{step === 2 && (
+				<React.Fragment>
+					<MaterialTextInput
+						value={userName}
+						onChangeText={(text: string) => {
+							if (!text) {
+								setError({
+									...error,
+									name: 'Please enter your name',
+								});
+							} else {
+								setError({
+									...error,
+									name: '',
+								});
+							}
+							setUserName(text);
+						}}
+						variant='standard'
+						label=''
+						placeholder='Enter your name'
+						style={{
+							marginVertical: getWidthnHeight(8).width,
+						}}
+						helperText={error.name}
+						autoComplete='name'
+						inputMode='text'
+						keyboardType='default'
+						textContentType='name'
+						returnKeyType='next'
+						blurOnSubmit={false}
+						onSubmitEditing={() => emailRef.current?.focus()}
+						onEndEditing={({ nativeEvent }) => {
+							if (!nativeEvent.text) {
+								setError({
+									...error,
+									name: 'Please enter your name',
+								});
+							} else {
+								setError({
+									...error,
+									name: '',
+								});
+							}
+						}}
+					/>
+					<MaterialTextInput
+						ref={emailRef}
+						value={userEmail}
+						onChangeText={(text: string) => {
+							if (text && !validateEmail(text)) {
+								setError({
+									...error,
+									email: 'Please enter valid email',
+								});
+							} else {
+								setError({
+									...error,
+									email: '',
+								});
+							}
+							setUserEmail(text);
+						}}
+						variant='standard'
+						label=''
+						placeholder='Enter your email (optional)'
+						style={{
+							marginBottom: getWidthnHeight(10).width,
+						}}
+						helperText={error.email}
+						autoComplete='email'
+						inputMode='email'
+						keyboardType='email-address'
+						textContentType='emailAddress'
+						onEndEditing={({ nativeEvent }) => {
+							if (
+								nativeEvent.text &&
+								!validateEmail(nativeEvent.text)
+							) {
+								setError({
+									...error,
+									email: 'Please enter valid email',
+								});
+							} else {
+								setError({
+									...error,
+									email: '',
+								});
+							}
+						}}
+					/>
+				</React.Fragment>
+			)}
+			<Button
+				mode='contained'
+				style={{
+					borderRadius: 24,
+					marginBottom: getWidthnHeight(4).width,
+				}}
+				labelStyle={{
+					fontFamily: fonts.Ovo,
+					fontSize: getWidthnHeight(6).width,
+					padding: getWidthnHeight(1).width,
+					textAlignVertical: 'center',
+				}}
+				onPress={handleOnPress}
+				buttonColor={colors.primaryRed}
+				disabled={step === 1 && (!!error.otp || otp.length < 6)}
+			>
+				Continue
+			</Button>
+		</ScreenWithImageHeader>
 	);
 };
 
 const styles = StyleSheet.create({
-	heading: {
-		color: 'white',
-		textAlign: 'center',
-		fontSize: getWidthnHeight(10).width,
-		textAlignVertical: 'center',
-	},
-	container: {
-		borderRadius: 12,
-		backgroundColor: 'white',
-		marginHorizontal: 20,
-		paddingHorizontal: 20,
-		marginTop: -30,
-		// flexGrow: 1,
-	},
 	avatar: {
 		backgroundColor: colors.primaryRed,
 		borderRadius: 50,
-		width: getWidthnHeight(20).width,
-		height: getWidthnHeight(20).width,
+		width: getWidthnHeight(25).width,
+		height: getWidthnHeight(25).width,
 		justifyContent: 'flex-end',
 		alignItems: 'center',
 		alignSelf: 'center',
-		marginVertical: getWidthnHeight(6).width,
+		marginTop: getWidthnHeight(8).width,
+		marginBottom: getWidthnHeight(6).width,
 	},
 	image: {
-		width: getWidthnHeight(16).width,
-		height: getWidthnHeight(16).width,
+		width: getWidthnHeight(20).width,
+		height: getWidthnHeight(20).width,
 		marginBottom: getWidthnHeight(0.4).width,
 	},
 	text: {
 		color: 'black',
-		fontSize: getWidthnHeight(5).width,
+		fontFamily: fonts.Ovo,
+		fontSize: getWidthnHeight(7).width,
 		textAlign: 'center',
 	},
 	otpHeading: {
 		color: colors.lightInputGrey,
-		fontSize: getWidthnHeight(3.5).width,
+		fontSize: getWidthnHeight(3.8).width,
+		fontFamily: fonts.Ovo,
 	},
 	otp: {
 		flexDirection: 'row',
@@ -457,7 +429,7 @@ const styles = StyleSheet.create({
 	},
 	otpInput: {
 		fontSize: getWidthnHeight(8).width,
-		fontFamily: 'Ovo',
+		fontFamily: fonts.Ovo,
 		paddingHorizontal: 10,
 		paddingVertical: 2,
 		textAlign: 'center',
@@ -469,9 +441,6 @@ const styles = StyleSheet.create({
 	},
 	otpInputActive: {
 		borderColor: colors.primaryRed,
-	},
-	button: {
-		marginBottom: getWidthnHeight(10).width,
 	},
 });
 

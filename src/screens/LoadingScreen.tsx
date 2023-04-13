@@ -43,8 +43,9 @@ const LoadingScreen = () => {
 	return (
 		<View style={styles.screen}>
 			<FocusAwareStatusBar
-				style='dark'
+				barStyle='dark-content'
 				translucent={true}
+				backgroundColor={'transparent'}
 				hidden={false}
 			/>
 			<ActivityIndicator

@@ -32,6 +32,10 @@
 		C2ED9F8E29E0104A0017D84F /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2ED9F7E29E0104A0017D84F /* SimpleLineIcons.ttf */; };
 		D3DE783BFB64B46171BD83E7 /* Pods_FoodApp_Customer_FoodApp_CustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B8AF764DBB424B7B918722 /* Pods_FoodApp_Customer_FoodApp_CustomerTests.framework */; };
 		F51A8DBE8C02E46FA3B2D03B /* Pods_FoodApp_Customer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 890C477E03D468F57C55B011 /* Pods_FoodApp_Customer.framework */; };
+		C7F64C81EF4E4A8785FF3636 /* Oxygen-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD4ACF4F92054418A626CCFC /* Oxygen-Bold.ttf */; };
+		294535EAC1DE4BC9A4318215 /* Oxygen-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9CB1C2F11FC4AEC835219C7 /* Oxygen-Light.ttf */; };
+		6D3DC745481C4E2FB006F1EA /* Oxygen-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29307BA1B9A5424480E82439 /* Oxygen-Regular.ttf */; };
+		3D8170A67E5744768DF6DBA5 /* Pattaya-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CAF3B820C32A47EB81A819CF /* Pattaya-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +84,10 @@
 		F0619F0C3E06AB2EC5E7E026 /* Pods-FoodApp_Customer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodApp_Customer.debug.xcconfig"; path = "Target Support Files/Pods-FoodApp_Customer/Pods-FoodApp_Customer.debug.xcconfig"; sourceTree = "<group>"; };
 		F5CC776C29914C18AD5ECE51 /* Pods-FoodApp_Customer-FoodApp_CustomerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodApp_Customer-FoodApp_CustomerTests.debug.xcconfig"; path = "Target Support Files/Pods-FoodApp_Customer-FoodApp_CustomerTests/Pods-FoodApp_Customer-FoodApp_CustomerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FAD018AD68F1B0A336DC9C12 /* Pods-FoodApp_Customer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodApp_Customer.release.xcconfig"; path = "Target Support Files/Pods-FoodApp_Customer/Pods-FoodApp_Customer.release.xcconfig"; sourceTree = "<group>"; };
+		AD4ACF4F92054418A626CCFC /* Oxygen-Bold.ttf */ = {isa = PBXFileReference; name = "Oxygen-Bold.ttf"; path = "../src/assets/fonts/Oxygen-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F9CB1C2F11FC4AEC835219C7 /* Oxygen-Light.ttf */ = {isa = PBXFileReference; name = "Oxygen-Light.ttf"; path = "../src/assets/fonts/Oxygen-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		29307BA1B9A5424480E82439 /* Oxygen-Regular.ttf */ = {isa = PBXFileReference; name = "Oxygen-Regular.ttf"; path = "../src/assets/fonts/Oxygen-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CAF3B820C32A47EB81A819CF /* Pattaya-Regular.ttf */ = {isa = PBXFileReference; name = "Pattaya-Regular.ttf"; path = "../src/assets/fonts/Pattaya-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +155,10 @@
 			isa = PBXGroup;
 			children = (
 				691AC72DAD3C402C800666B3 /* Ovo-Regular.ttf */,
+				AD4ACF4F92054418A626CCFC /* Oxygen-Bold.ttf */,
+				F9CB1C2F11FC4AEC835219C7 /* Oxygen-Light.ttf */,
+				29307BA1B9A5424480E82439 /* Oxygen-Regular.ttf */,
+				CAF3B820C32A47EB81A819CF /* Pattaya-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -333,6 +345,10 @@
 				C2975AAB29E5745C003BBCAA /* GoogleService-Info.plist in Resources */,
 				C2ED9F8329E0104A0017D84F /* Fontisto.ttf in Resources */,
 				9A6FC5DC5E4D4F02AF5892BF /* Ovo-Regular.ttf in Resources */,
+				C7F64C81EF4E4A8785FF3636 /* Oxygen-Bold.ttf in Resources */,
+				294535EAC1DE4BC9A4318215 /* Oxygen-Light.ttf in Resources */,
+				6D3DC745481C4E2FB006F1EA /* Oxygen-Regular.ttf in Resources */,
+				3D8170A67E5744768DF6DBA5 /* Pattaya-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

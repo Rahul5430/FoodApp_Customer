@@ -13,8 +13,8 @@ const WelcomeNavigator = () => {
 				headerShown: false,
 			}}
 		>
-			<Stack.Screen name='LocationScreen' component={LocationScreen} />
 			<Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
+			<Stack.Screen name='LocationScreen' component={LocationScreen} />
 		</Stack.Navigator>
 	);
 };

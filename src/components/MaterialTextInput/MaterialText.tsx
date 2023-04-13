@@ -2,7 +2,7 @@ import React from 'react';
 import { Text as RNText, TextProps as RNTextProps } from 'react-native';
 
 import { RFValue } from '../../helpers/responsiveFontSize';
-import { colors } from '../../themes';
+import { colors, fonts } from '../../themes';
 import { TypographyVariant, useTheme } from './base/ThemeContext';
 
 export interface MaterialTextProps extends RNTextProps {
@@ -36,7 +36,7 @@ const MaterialText: React.FC<MaterialTextProps> = ({
 				typography[variant],
 				{
 					color: colors.darkGrey,
-					fontFamily: 'Ovo',
+					fontFamily: fonts.Ovo,
 					fontSize: RFValue(14),
 				},
 				style,

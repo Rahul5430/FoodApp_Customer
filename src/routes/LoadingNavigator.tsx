@@ -1,8 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoadingScreen from '../screens/LoadingScreen';
+import { LoadingStackParamList } from '../types/navigation';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<LoadingStackParamList>();
 
 const LoadingNavigator = () => {
 	return (

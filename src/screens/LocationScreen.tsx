@@ -1,5 +1,5 @@
 import Geolocation from '@react-native-community/geolocation';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -15,16 +15,24 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useDispatch } from 'react-redux';
 
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import { getWidthnHeight } from '../helpers/responsiveFontSize';
+import { setLoggedIn } from '../store/reducers/userSlice';
+import { AppDispatch } from '../store/store';
 import { colors } from '../themes';
 import { WelcomeStackScreenProps } from '../types/navigation';
 
-const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
-	const { top, bottom } = useSafeAreaInsets();
+const LocationScreen: React.FC<
+	WelcomeStackScreenProps<'LocationScreen'>
+> = () => {
+	const dispatch = useDispatch<AppDispatch>();
 
-	const [middleViewHeight, setMiddleViewHeight] = useState(0);
+	const { top, bottom } = useSafeAreaInsets();
+	const bottomSafeAreaInset =
+		bottom < getWidthnHeight(3).width ? getWidthnHeight(3).width : bottom;
+
 	const [searchText, setSearchText] = useState('');
 	const [coords, setCoords] = useState<Region>({
 		latitude: 30.709597189331838,
@@ -50,6 +58,7 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 					latitude: pos.coords.latitude,
 					longitude: pos.coords.longitude,
 				});
+				dispatch(setLoggedIn(true));
 			},
 			(error) => Toast.show(error.message)
 		);
@@ -57,6 +66,7 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 
 	const skip = () => {
 		console.log('skip');
+		dispatch(setLoggedIn(true));
 	};
 
 	const onRegionChangeComplete = (region: Region) => {
@@ -81,8 +91,12 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			>
 				<ScrollView
-					contentContainerStyle={{ flexGrow: 1 }}
+					contentContainerStyle={{
+						justifyContent: 'space-between',
+						height: getWidthnHeight(100, 100).height,
+					}}
 					keyboardShouldPersistTaps='handled'
+					scrollEnabled={false}
 				>
 					<View
 						style={[
@@ -165,23 +179,12 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 						</View>
 					</View>
 					<View
-						onLayout={(e) => {
-							const { height } = e.nativeEvent.layout;
-							setMiddleViewHeight(height);
+						style={{
+							backgroundColor: 'white',
+							padding: getWidthnHeight(3).width,
+							paddingBottom: bottomSafeAreaInset,
+							paddingTop: getWidthnHeight(4.4).width,
 						}}
-						style={{ flexGrow: 1, height: middleViewHeight }}
-						pointerEvents='none'
-					/>
-					<View
-						style={[
-							styles.bottomBox,
-							{
-								paddingBottom:
-									bottom < getWidthnHeight(3).width
-										? getWidthnHeight(3).width
-										: bottom,
-							},
-						]}
 					>
 						<View
 							style={{
@@ -229,13 +232,18 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 						<View
 							style={{
 								flexDirection: 'row',
-								justifyContent: 'center',
+								justifyContent: 'space-evenly',
 								alignItems: 'center',
 							}}
 						>
 							<Button
 								mode='contained'
-								style={[{ flexGrow: 5, borderRadius: 9 }]}
+								style={[
+									{
+										width: getWidthnHeight(60).width,
+										borderRadius: 9,
+									},
+								]}
 								onPress={getCurrentLocation}
 								buttonColor={colors.primaryRed}
 								labelStyle={styles.btnText}
@@ -244,7 +252,7 @@ const LocationScreen = (props: WelcomeStackScreenProps<'LocationScreen'>) => {
 							</Button>
 							<Button
 								mode='text'
-								style={[{ flexGrow: 1 }]}
+								style={[{ width: getWidthnHeight(20).width }]}
 								contentStyle={{ flexDirection: 'row-reverse' }}
 								onPress={skip}
 								buttonColor={'white'}

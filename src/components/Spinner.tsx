@@ -1,13 +1,15 @@
 import React from 'react';
 import {
-	View,
-	Text,
 	ActivityIndicator,
 	ActivityIndicatorProps,
 	StyleProp,
+	Text,
+	View,
 	ViewStyle,
 } from 'react-native';
+
 import { RFValue } from '../helpers/responsiveFontSize';
+import { fonts } from '../themes';
 
 interface SpinnerProps extends ActivityIndicatorProps {
 	loading: boolean;
@@ -48,7 +50,7 @@ const Spinner = ({ loading, style, label = 'Loading...' }: SpinnerProps) => {
 					<Text
 						style={{
 							fontSize: RFValue(16),
-							fontFamily: 'Ovo',
+							fontFamily: fonts.Ovo,
 							paddingHorizontal: 5,
 						}}
 					>

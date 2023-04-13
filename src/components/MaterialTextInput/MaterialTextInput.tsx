@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {
 	useCallback,
 	useEffect,
@@ -21,7 +22,7 @@ import {
 } from 'react-native';
 
 import { RFValue } from '../../helpers/responsiveFontSize';
-import { colors } from '../../themes';
+import { colors, fonts } from '../../themes';
 import { useStyles } from './hooks/use-styles';
 import MaterialText from './MaterialText';
 
@@ -312,9 +313,11 @@ const MaterialTextInput = React.forwardRef(
 						variant === 'standard'
 							? leadingNode
 								? leadingContainerStyle &&
+								  // @ts-ignore
 								  typeof leadingContainerStyle.width ===
 										'number'
-									? leadingContainerStyle.width + 12
+									? // @ts-ignore
+									  leadingContainerStyle.width + 12
 									: 36
 								: 0
 							: leadingNode
@@ -430,9 +433,9 @@ const MaterialTextInput = React.forwardRef(
 						style={[
 							styles.input,
 							{
-								fontSize: RFValue(16),
+								fontSize: RFValue(18),
 								letterSpacing: 0.15,
-								fontFamily: 'Ovo',
+								fontFamily: fonts.Ovo,
 							},
 							variant === 'filled' &&
 								label && {
@@ -526,9 +529,9 @@ const MaterialTextInput = React.forwardRef(
 							<Animated.Text
 								style={[
 									{
-										fontSize: RFValue(16),
+										fontSize: RFValue(18),
 										letterSpacing: 0.15,
-										fontFamily: 'Ovo',
+										fontFamily: fonts.Ovo,
 									},
 									{
 										color: activeAnimation.interpolate({
@@ -579,7 +582,7 @@ const MaterialTextInput = React.forwardRef(
 									<Animated.Text
 										style={{
 											color: colors.golden,
-											fontSize: RFValue(16),
+											fontSize: RFValue(18),
 										}}
 									>
 										*
