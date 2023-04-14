@@ -41,11 +41,16 @@ const ScrollViewWithImageHeader = ({
 	const screenWidth = getWidthnHeight(100).width;
 	const aspectRatio = 237 / 428;
 	const imageHeight = aspectRatio * screenWidth;
-	const imageHeightPercent =
-		(imageHeight * 100) / getWidthnHeight(100, 100, 'screen').height;
-
-	const { bottom } = useSafeAreaInsets();
-	const bottomSafeAreaInset = Math.max(bottom, getWidthnHeight(5).width);
+	const { top, bottom } = useSafeAreaInsets();
+	const remainingHeight =
+		getWidthnHeight(100, 100).height + top - imageHeight;
+	const bottomSafeAreaInset = Math.max(
+		bottom,
+		getWidthnHeight(100, 100).height -
+			(imageHeight +
+				remainingHeight -
+				getWidthnHeight(100, 5, 'screen').height)
+	);
 
 	return (
 		<View style={{ flexGrow: 1 }}>
@@ -86,12 +91,7 @@ const ScrollViewWithImageHeader = ({
 							styles.container,
 							{
 								marginBottom: bottomSafeAreaInset,
-								paddingBottom: bottomSafeAreaInset,
-								minHeight: getWidthnHeight(
-									100,
-									100 - imageHeightPercent - 10,
-									'screen'
-								).height,
+								minHeight: remainingHeight,
 							},
 							containerStyle,
 						]}
