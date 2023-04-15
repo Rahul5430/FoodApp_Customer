@@ -1,4 +1,5 @@
-import React from 'react';
+import BottomSheet from '@gorhom/bottom-sheet';
+import React, { useCallback, useMemo, useRef } from 'react';
 import {
 	Animated,
 	ImageBackground,
@@ -15,31 +16,46 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import { getWidthnHeight } from '../helpers/responsiveFontSize';
+import { responsiveImageHeight } from '../helpers/responsiveImageSize';
 import { fonts } from '../themes';
 
-type ScrollViewWithImageHeaderProps = {
+type ScreenWithImageHeaderProps = {
 	children: React.ReactNode;
 	title?: string;
 	titleStyle?: StyleProp<TextStyle>;
 	containerStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
 	statusBarProps?: StatusBarProps;
+	withBottomSheet?: boolean;
+	bottomSheetChildren?: React.ReactNode;
 };
 
-const ScrollViewWithImageHeader = ({
+const ScreenWithImageHeader = ({
 	children,
 	title = "Baker's in",
 	titleStyle,
 	containerStyle,
 	statusBarProps,
-}: ScrollViewWithImageHeaderProps) => {
+	withBottomSheet = false,
+	bottomSheetChildren,
+}: ScreenWithImageHeaderProps) => {
 	const screenWidth = getWidthnHeight(100).width;
-	const aspectRatio = 237 / 428;
-	const imageHeight = aspectRatio * screenWidth;
-	const imageHeightPercent =
-		(imageHeight * 100) / getWidthnHeight(100, 100, 'screen').height;
+	const imageHeight = responsiveImageHeight(428, 237, screenWidth);
+	const { top, bottom } = useSafeAreaInsets();
+	const remainingHeight =
+		getWidthnHeight(100, 100).height + top - imageHeight;
+	const bottomSafeAreaInset = Math.max(
+		bottom,
+		getWidthnHeight(100, 100).height -
+			(imageHeight +
+				remainingHeight -
+				getWidthnHeight(100, 5, 'screen').height)
+	);
 
-	const { bottom } = useSafeAreaInsets();
-	const bottomSafeAreaInset = Math.max(bottom, getWidthnHeight(5).width);
+	const bottomSheetRef = useRef<BottomSheet>(null);
+	const snapPoints = useMemo(() => ['40%'], []);
+	const handleSheetChanges = useCallback((index: number) => {
+		console.log('handleSheetChanges', index);
+	}, []);
 
 	return (
 		<View style={{ flexGrow: 1 }}>
@@ -51,7 +67,7 @@ const ScrollViewWithImageHeader = ({
 				{...statusBarProps}
 			/>
 			<ImageBackground
-				source={require('../assets/cakebanner.png')}
+				source={require('../assets/images/cakebanner.png')}
 				style={{
 					width: screenWidth,
 					height: imageHeight,
@@ -65,12 +81,10 @@ const ScrollViewWithImageHeader = ({
 					styles.container,
 					{
 						marginBottom: bottomSafeAreaInset,
-						paddingBottom: bottomSafeAreaInset,
-						height: getWidthnHeight(
-							100,
-							100 - imageHeightPercent - 7,
-							'screen'
-						).height,
+						minHeight:
+							remainingHeight -
+							getWidthnHeight(100, 5, 'screen').height,
+						maxHeight: remainingHeight,
 					},
 					containerStyle,
 				]}
@@ -78,6 +92,17 @@ const ScrollViewWithImageHeader = ({
 			>
 				{children}
 			</Surface>
+			{withBottomSheet && (
+				<BottomSheet
+					ref={bottomSheetRef}
+					index={0}
+					snapPoints={snapPoints}
+					onChange={handleSheetChanges}
+					handleComponent={null}
+				>
+					{bottomSheetChildren}
+				</BottomSheet>
+			)}
 		</View>
 	);
 };
@@ -99,4 +124,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ScrollViewWithImageHeader;
+export default ScreenWithImageHeader;

@@ -19,7 +19,7 @@ import { Button } from 'react-native-paper';
 import Toast from 'react-native-root-toast';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import CartoonUser from '../assets/cartoonuser.png';
+import CartoonUser from '../assets/images/cartoonuser.png';
 import MaterialTextInput from '../components/MaterialTextInput/MaterialTextInput';
 import OtpInputs from '../components/OTPInputs';
 import { getWidthnHeight, RFValue } from '../helpers/responsiveFontSize';

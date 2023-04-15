@@ -11,133 +11,133 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 
-import CartoonUser from '../../assets/cartoonuser.png';
+import CartoonUser from '../../assets/images/cartoonuser.png';
 import { getWidthnHeight } from '../../helpers/responsiveFontSize';
 import ScreenWithImageHeader from '../../layouts/ScreenWithImageHeader';
 import { colors, fonts } from '../../themes';
 import { AuthenticatedStackScreenProps } from '../../types/navigation';
 
-const myProfileList = [
-	{
-		icon: (
-			<MaterialCommunityIcons
-				name='calendar-month-outline'
-				color={colors.primaryRed}
-				size={getWidthnHeight(5).width}
-			/>
-		),
-		name: 'Special Dates',
-		onPress: () => {
-			console.log('Pressed Special Dates');
+const MyProfile: React.FC<AuthenticatedStackScreenProps<'MyProfile'>> = ({
+	navigation,
+}) => {
+	const myProfileList = [
+		{
+			icon: (
+				<MaterialCommunityIcons
+					name='calendar-month-outline'
+					color={colors.primaryRed}
+					size={getWidthnHeight(5).width}
+				/>
+			),
+			name: 'Special Dates',
+			onPress: () => {
+				console.log('Pressed Special Dates');
+			},
 		},
-	},
-	{
-		icon: (
-			<MaterialCommunityIcons
-				name='notebook'
-				color={colors.primaryRed}
-				size={getWidthnHeight(5).width}
-			/>
-		),
-		name: 'My Orders',
-		onPress: () => {
-			console.log('Pressed My Orders');
+		{
+			icon: (
+				<MaterialCommunityIcons
+					name='notebook'
+					color={colors.primaryRed}
+					size={getWidthnHeight(5).width}
+				/>
+			),
+			name: 'My Orders',
+			onPress: () => {
+				console.log('Pressed My Orders');
+			},
 		},
-	},
-	{
-		icon: (
-			<MaterialCommunityIcons
-				name='cart-outline'
-				color={colors.primaryRed}
-				size={getWidthnHeight(5).width}
-			/>
-		),
-		name: 'My Cart',
-		onPress: () => {
-			console.log('Pressed My Cart');
+		{
+			icon: (
+				<MaterialCommunityIcons
+					name='cart-outline'
+					color={colors.primaryRed}
+					size={getWidthnHeight(5).width}
+				/>
+			),
+			name: 'My Cart',
+			onPress: () => {
+				console.log('Pressed My Cart');
+			},
 		},
-	},
-	{
-		icon: (
-			<MaterialCommunityIcons
-				name='map-marker-outline'
-				color={colors.primaryRed}
-				size={getWidthnHeight(5).width}
-			/>
-		),
-		name: 'Address',
-		onPress: () => {
-			console.log('Pressed Address');
+		{
+			icon: (
+				<MaterialCommunityIcons
+					name='map-marker-outline'
+					color={colors.primaryRed}
+					size={getWidthnHeight(5).width}
+				/>
+			),
+			name: 'Address',
+			onPress: () => {
+				console.log('Pressed Address');
+			},
 		},
-	},
-	{
-		icon: (
-			<MaterialCommunityIcons
-				name='cash-multiple'
-				color={colors.primaryRed}
-				size={getWidthnHeight(5).width}
-			/>
-		),
-		name: 'Wallet',
-		onPress: () => {
-			console.log('Pressed Wallet');
+		{
+			icon: (
+				<MaterialCommunityIcons
+					name='cash-multiple'
+					color={colors.primaryRed}
+					size={getWidthnHeight(5).width}
+				/>
+			),
+			name: 'Wallet',
+			onPress: () => navigation.navigate('PaymentsScreen'),
 		},
-	},
-	{
-		icon: (
-			<Ionicons
-				name='settings-sharp'
-				color={colors.primaryRed}
-				size={getWidthnHeight(5).width}
-			/>
-		),
-		name: 'Settings',
-		onPress: () => {
-			console.log('Pressed Settings');
+		{
+			icon: (
+				<Ionicons
+					name='settings-sharp'
+					color={colors.primaryRed}
+					size={getWidthnHeight(5).width}
+				/>
+			),
+			name: 'Settings',
+			onPress: () => {
+				console.log('Pressed Settings');
+			},
 		},
-	},
-	{
-		icon: (
-			<MaterialCommunityIcons
-				name='account-question'
-				color={colors.primaryRed}
-				size={getWidthnHeight(5).width}
-			/>
-		),
-		name: 'Help',
-		onPress: () => {
-			console.log('Pressed Help');
+		{
+			icon: (
+				<MaterialCommunityIcons
+					name='account-question'
+					color={colors.primaryRed}
+					size={getWidthnHeight(5).width}
+				/>
+			),
+			name: 'Help',
+			onPress: () => {
+				console.log('Pressed Help');
+			},
 		},
-	},
-	{
-		icon: (
-			<Octicons
-				name='comment-discussion'
-				color={colors.primaryRed}
-				size={getWidthnHeight(5).width}
-			/>
-		),
-		name: 'FAQ',
-		onPress: () => {
-			console.log('Pressed FAQ');
+		{
+			icon: (
+				<Octicons
+					name='comment-discussion'
+					color={colors.primaryRed}
+					size={getWidthnHeight(5).width}
+				/>
+			),
+			name: 'FAQ',
+			onPress: () => {
+				console.log('Pressed FAQ');
+			},
 		},
-	},
-	{
-		icon: (
-			<MaterialIcons
-				name='logout'
-				color={colors.primaryRed}
-				size={getWidthnHeight(5).width}
-			/>
-		),
-		name: 'Logout',
-		onPress: () => {
-			console.log('Pressed Logout');
+		{
+			icon: (
+				<MaterialIcons
+					name='logout'
+					color={colors.primaryRed}
+					size={getWidthnHeight(5).width}
+				/>
+			),
+			name: 'Logout',
+			onPress: () => {
+				console.log('Pressed Logout');
+			},
 		},
-	},
-];
+	];
 
-const MyProfile: React.FC<AuthenticatedStackScreenProps<'MyProfile'>> = () => {
 	return (
 		<ScreenWithImageHeader
 			title='My Profile'
@@ -181,6 +181,21 @@ const MyProfile: React.FC<AuthenticatedStackScreenProps<'MyProfile'>> = () => {
 							/>
 						</View>
 					</TouchableOpacity>
+				)}
+				ItemSeparatorComponent={() => (
+					<View
+						style={{
+							borderBottomColor: colors.lightGrey,
+							borderBottomWidth: 1,
+						}}
+					/>
+				)}
+				ListFooterComponent={() => (
+					<View
+						style={{
+							marginBottom: getWidthnHeight(3).width,
+						}}
+					/>
 				)}
 				showsVerticalScrollIndicator={false}
 			/>
@@ -227,8 +242,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingHorizontal: getWidthnHeight(1.8).width,
 		paddingVertical: getWidthnHeight(2.4).width,
-		borderBottomColor: colors.lightGrey,
-		borderBottomWidth: 1,
 	},
 	profileListOptionIcon: {
 		backgroundColor: colors.lightGrey,

@@ -9,6 +9,7 @@ export type MainStackParamList = {
 export type AuthenticatedStackParamList = {
 	Dashboard: undefined;
 	MyProfile: undefined;
+	PaymentsScreen: undefined;
 };
 
 export type AuthenticatedStackScreenProps<

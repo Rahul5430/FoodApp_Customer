@@ -91,3 +91,14 @@ export const isIphoneX = () => {
 			dimen.width === 926)
 	);
 };
+
+export function numberWithSpace(x: string, ch?: string) {
+	if (ch) {
+		return x
+			.replace(/\W/gi, '')
+			.replace(/\S(?=.{4})/g, '*')
+			.replace(/(.{4})/g, '$1  ');
+	} else {
+		return x.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ');
+	}
+}

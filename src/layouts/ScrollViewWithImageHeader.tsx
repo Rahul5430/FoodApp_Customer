@@ -19,6 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import { getWidthnHeight } from '../helpers/responsiveFontSize';
+import { responsiveImageHeight } from '../helpers/responsiveImageSize';
 import { fonts } from '../themes';
 
 type ScrollViewWithImageHeaderProps = {
@@ -39,8 +40,7 @@ const ScrollViewWithImageHeader = ({
 	scrollViewProps,
 }: ScrollViewWithImageHeaderProps) => {
 	const screenWidth = getWidthnHeight(100).width;
-	const aspectRatio = 237 / 428;
-	const imageHeight = aspectRatio * screenWidth;
+	const imageHeight = responsiveImageHeight(428, 237, screenWidth);
 	const { top, bottom } = useSafeAreaInsets();
 	const remainingHeight =
 		getWidthnHeight(100, 100).height + top - imageHeight;
@@ -75,7 +75,7 @@ const ScrollViewWithImageHeader = ({
 					{...scrollViewProps}
 				>
 					<ImageBackground
-						source={require('../assets/cakebanner.png')}
+						source={require('../assets/images/cakebanner.png')}
 						style={{
 							width: screenWidth,
 							height: imageHeight,
