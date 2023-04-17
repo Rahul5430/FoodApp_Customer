@@ -1,8 +1,9 @@
-import BottomSheet from '@gorhom/bottom-sheet';
-import React, { useCallback, useMemo, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
 import {
 	Animated,
 	ImageBackground,
+	Pressable,
 	StatusBarProps,
 	StyleProp,
 	StyleSheet,
@@ -13,6 +14,7 @@ import {
 } from 'react-native';
 import { Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Feather from 'react-native-vector-icons/Feather';
 
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import { getWidthnHeight } from '../helpers/responsiveFontSize';
@@ -25,8 +27,7 @@ type ScreenWithImageHeaderProps = {
 	titleStyle?: StyleProp<TextStyle>;
 	containerStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
 	statusBarProps?: StatusBarProps;
-	withBottomSheet?: boolean;
-	bottomSheetChildren?: React.ReactNode;
+	backButton?: boolean;
 };
 
 const ScreenWithImageHeader = ({
@@ -35,8 +36,7 @@ const ScreenWithImageHeader = ({
 	titleStyle,
 	containerStyle,
 	statusBarProps,
-	withBottomSheet = false,
-	bottomSheetChildren,
+	backButton = false,
 }: ScreenWithImageHeaderProps) => {
 	const screenWidth = getWidthnHeight(100).width;
 	const imageHeight = responsiveImageHeight(428, 237, screenWidth);
@@ -51,11 +51,7 @@ const ScreenWithImageHeader = ({
 				getWidthnHeight(100, 5, 'screen').height)
 	);
 
-	const bottomSheetRef = useRef<BottomSheet>(null);
-	const snapPoints = useMemo(() => ['40%'], []);
-	const handleSheetChanges = useCallback((index: number) => {
-		console.log('handleSheetChanges', index);
-	}, []);
+	const navigation = useNavigation();
 
 	return (
 		<View style={{ flexGrow: 1 }}>
@@ -74,6 +70,22 @@ const ScreenWithImageHeader = ({
 					justifyContent: 'center',
 				}}
 			>
+				{backButton && (
+					<Pressable
+						onPress={() => navigation.goBack()}
+						style={{
+							position: 'absolute',
+							top: top + 10,
+							left: 10,
+						}}
+					>
+						<Feather
+							name='chevron-left'
+							color='white'
+							size={getWidthnHeight(10).width}
+						/>
+					</Pressable>
+				)}
 				<Text style={[styles.heading, titleStyle]}>{title}</Text>
 			</ImageBackground>
 			<Surface
@@ -92,17 +104,6 @@ const ScreenWithImageHeader = ({
 			>
 				{children}
 			</Surface>
-			{withBottomSheet && (
-				<BottomSheet
-					ref={bottomSheetRef}
-					index={0}
-					snapPoints={snapPoints}
-					onChange={handleSheetChanges}
-					handleComponent={null}
-				>
-					{bottomSheetChildren}
-				</BottomSheet>
-			)}
 		</View>
 	);
 };

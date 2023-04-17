@@ -91,7 +91,10 @@ const ScrollViewWithImageHeader = ({
 							styles.container,
 							{
 								marginBottom: bottomSafeAreaInset,
-								minHeight: remainingHeight,
+								minHeight:
+									remainingHeight -
+									getWidthnHeight(100, 5, 'screen').height,
+								maxHeight: remainingHeight,
 							},
 							containerStyle,
 						]}
