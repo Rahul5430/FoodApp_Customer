@@ -1,4 +1,14 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Region } from 'react-native-maps';
+
+export type Address = {
+	id: string;
+	label: string;
+	address: string;
+	floor?: string;
+	landmark?: string;
+	coords: Region;
+};
 
 export type MainStackParamList = {
 	AuthenticatedStack: undefined;
@@ -10,6 +20,10 @@ export type AuthenticatedStackParamList = {
 	Dashboard: undefined;
 	MyProfile: undefined;
 	AddressScreen: undefined;
+	LocationScreen: {
+		fromAddressScreen: boolean;
+		address: Address | undefined;
+	};
 	PaymentsScreen: undefined;
 };
 

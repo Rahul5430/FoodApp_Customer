@@ -1,50 +1,229 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { GOOGLE_MAPS_API_KEY } from '@env';
+import BottomSheet, {
+	BottomSheetTextInput,
+	TouchableOpacity,
+	useBottomSheetDynamicSnapPoints,
+} from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Geolocation from '@react-native-community/geolocation';
-import React, { useEffect, useRef, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import {
+	Alert,
+	BackHandler,
 	KeyboardAvoidingView,
+	Linking,
+	PermissionsAndroid,
 	Platform,
+	Pressable,
 	ScrollView,
 	StyleSheet,
 	Text,
+	ToastAndroid,
 	View,
 } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
+import MapView, {
+	LatLng,
+	Marker,
+	PROVIDER_GOOGLE,
+	Region,
+} from 'react-native-maps';
 import { Button, Searchbar } from 'react-native-paper';
 import Toast from 'react-native-root-toast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch } from 'react-redux';
 
+import appConfig from '../../app.json';
+import BottomSheetComponent, {
+	CustomBottomSheetProps,
+} from '../components/BottomSheetComponent';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import { getWidthnHeight } from '../helpers/responsiveFontSize';
 import { setLoggedIn } from '../store/reducers/userSlice';
 import { AppDispatch } from '../store/store';
-import { colors } from '../themes';
-import { WelcomeStackScreenProps } from '../types/navigation';
+import { colors, fonts } from '../themes';
+import {
+	Address,
+	AuthenticatedStackScreenProps,
+	WelcomeStackScreenProps,
+} from '../types/navigation';
 
 const LocationScreen: React.FC<
-	WelcomeStackScreenProps<'LocationScreen'>
-> = () => {
+	| WelcomeStackScreenProps<'LocationScreen'>
+	| AuthenticatedStackScreenProps<'LocationScreen'>
+> = ({ navigation, route }) => {
+	console.log(route);
+	const address = route.params?.address;
+	const fromAddressScreen = route.params?.fromAddressScreen;
+
 	const dispatch = useDispatch<AppDispatch>();
 
 	const { top, bottom } = useSafeAreaInsets();
 	const bottomSafeAreaInset =
 		bottom < getWidthnHeight(3).width ? getWidthnHeight(3).width : bottom;
 
-	const [searchText, setSearchText] = useState('');
 	const [coords, setCoords] = useState<Region>({
 		latitude: 30.709597189331838,
 		longitude: 76.68947006872848,
 		latitudeDelta: 0.015,
 		longitudeDelta: 0.0121,
 	});
+	const [searchText, setSearchText] = useState('');
+	const [newAddress, setNewAddress] = useState<Address>({
+		id: '',
+		label: '',
+		address:
+			'Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab 160055',
+		coords: coords,
+	});
+	const [neighborhood, setNeighborhood] = useState('Phase 8B');
+	const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+	const [customBottomSheet, setCustomBottomSheet] =
+		useState<CustomBottomSheetProps>({
+			handleTitle: '',
+			bottomSheetChildren: null,
+			buttonText: '',
+		});
 
 	const mapRef = useRef<MapView>(null);
+	const bottomSheetRef = useRef<BottomSheet>(null);
+	const initialSnapPoints = useMemo(() => ['CONTENT_HEIGHT'], []);
 
-	const getCurrentLocation = () => {
+	const handleSheetChanges = useCallback((index: number) => {
+		console.log('handleSheetChanges', index);
+		if (index === -1) {
+			setIsBottomSheetOpen(false);
+			setCustomBottomSheet({
+				handleTitle: '',
+				bottomSheetChildren: null,
+				buttonText: '',
+			});
+		} else {
+			setIsBottomSheetOpen(true);
+		}
+	}, []);
+
+	useFocusEffect(
+		useCallback(() => {
+			const onBackPress = () => {
+				console.log(isBottomSheetOpen);
+				if (isBottomSheetOpen) {
+					bottomSheetRef.current?.close();
+					return true;
+				} else {
+					return false;
+				}
+			};
+
+			const subscription = BackHandler.addEventListener(
+				'hardwareBackPress',
+				onBackPress
+			);
+
+			return () => subscription.remove();
+		}, [isBottomSheetOpen])
+	);
+
+	const {
+		animatedHandleHeight,
+		animatedSnapPoints,
+		animatedContentHeight,
+		handleContentLayout,
+	} = useBottomSheetDynamicSnapPoints(initialSnapPoints);
+
+	const hasPermissionIOS = async () => {
+		const openSetting = () => {
+			Linking.openSettings().catch(() => {
+				Alert.alert('Unable to open settings');
+			});
+		};
+		const status = await Geolocation.requestAuthorization('whenInUse');
+
+		if (status === 'granted') {
+			return true;
+		}
+
+		if (status === 'denied') {
+			Alert.alert('Location permission denied');
+		}
+
+		if (status === 'disabled') {
+			Alert.alert(
+				`Turn on Location Services to allow "${appConfig.displayName}" to determine your location.`,
+				'',
+				[
+					{ text: 'Go to Settings', onPress: openSetting },
+					{
+						text: "Don't Use Location",
+						onPress: () => {
+							console.log('Denied');
+						},
+					},
+				]
+			);
+		}
+
+		return false;
+	};
+
+	const hasLocationPermission = async () => {
+		if (Platform.OS === 'ios') {
+			const hasPermission = await hasPermissionIOS();
+			return hasPermission;
+		}
+
+		if (Platform.OS === 'android' && Platform.Version < 23) {
+			return true;
+		}
+
+		const hasPermission = await PermissionsAndroid.check(
+			PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+		);
+
+		if (hasPermission) {
+			return true;
+		}
+
+		const status = await PermissionsAndroid.request(
+			PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+		);
+
+		if (status === PermissionsAndroid.RESULTS.GRANTED) {
+			return true;
+		}
+
+		if (status === PermissionsAndroid.RESULTS.DENIED) {
+			ToastAndroid.show(
+				'Location permission denied by user.',
+				ToastAndroid.LONG
+			);
+		} else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+			ToastAndroid.show(
+				'Location permission revoked by user.',
+				ToastAndroid.LONG
+			);
+		}
+
+		return false;
+	};
+
+	const getCurrentLocation = async () => {
+		const hasPermission = await hasLocationPermission();
+
+		if (!hasPermission) {
+			return;
+		}
 		console.log('getCurrentLocation');
 		Geolocation.getCurrentPosition(
 			(pos) => {
@@ -59,11 +238,46 @@ const LocationScreen: React.FC<
 					latitude: pos.coords.latitude,
 					longitude: pos.coords.longitude,
 				});
-				dispatch(setLoggedIn(true));
-				AsyncStorage.setItem('token', JSON.stringify({}));
+				if (!fromAddressScreen) {
+					dispatch(setLoggedIn(true));
+					AsyncStorage.setItem('token', JSON.stringify({}));
+				}
 			},
-			(error) => Toast.show(error.message)
+			(error) => Toast.show(error.message),
+			{
+				accuracy: {
+					android: 'high',
+					ios: 'best',
+				},
+				enableHighAccuracy: true,
+				timeout: 15000,
+				maximumAge: 10000,
+				distanceFilter: 0,
+				forceRequestLocation: true,
+			}
 		);
+	};
+
+	const getAddress = async ({ latitude, longitude }: LatLng) => {
+		const url =
+			'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+			latitude +
+			',' +
+			longitude +
+			'&key=' +
+			GOOGLE_MAPS_API_KEY;
+		const response = await fetch(url);
+		const data = await response.json();
+		const street_address = data.results[0];
+		console.log(street_address);
+		const neighborhood = street_address.address_components.find(
+			(item: { types: string[] }) =>
+				item.types.some((subItem) => subItem === 'neighborhood')
+		).long_name;
+		return {
+			formatted_address: street_address.formatted_address as string,
+			neighborhood: neighborhood as string,
+		};
 	};
 
 	const skip = () => {
@@ -71,13 +285,133 @@ const LocationScreen: React.FC<
 		dispatch(setLoggedIn(true));
 	};
 
-	const onRegionChangeComplete = (region: Region) => {
+	const onRegionChangeComplete = async (region: Region) => {
 		console.log('onRegionChangeComplete: ', region);
+		const { formatted_address, neighborhood } = await getAddress(region);
+		setNeighborhood(neighborhood);
+		setNewAddress({
+			...newAddress,
+			coords: region,
+			address: formatted_address,
+		});
 	};
 
 	useEffect(() => {
-		getCurrentLocation();
-	}, []);
+		if (address && fromAddressScreen) {
+			setCoords(address.coords);
+			onRegionChangeComplete(address.coords);
+		} else {
+			getCurrentLocation();
+		}
+	}, [address, fromAddressScreen]);
+
+	const AddressBottomSheetChildren = () => {
+		const [selectedLabel, setSelectedLabel] = useState<
+			'Home' | 'Work' | 'Other'
+		>('Home');
+
+		return (
+			<View style={styles.addressBottomSheet}>
+				<Text style={styles.nickname}>Save adress as*</Text>
+				<View style={styles.chipContainer}>
+					<TouchableOpacity onPress={() => setSelectedLabel('Home')}>
+						<Text
+							style={[
+								styles.chip,
+								selectedLabel === 'Home' && styles.selectedChip,
+							]}
+						>
+							Home
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={() => setSelectedLabel('Work')}>
+						<Text
+							style={[
+								styles.chip,
+								selectedLabel === 'Work' && styles.selectedChip,
+							]}
+						>
+							Work
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={() => setSelectedLabel('Other')}>
+						<Text
+							style={[
+								styles.chip,
+								selectedLabel === 'Other' &&
+									styles.selectedChip,
+							]}
+						>
+							Other
+						</Text>
+					</TouchableOpacity>
+				</View>
+				{selectedLabel === 'Other' && (
+					<BottomSheetTextInput
+						defaultValue={newAddress.label}
+						onChangeText={(text: string) =>
+							setNewAddress({
+								...newAddress,
+								label: text,
+							})
+						}
+						placeholder='Enter label for address'
+						style={styles.cardTextInput}
+						autoComplete='name'
+						inputMode='text'
+						keyboardType='default'
+						textContentType='name'
+					/>
+				)}
+				<BottomSheetTextInput
+					defaultValue={newAddress.address}
+					onChangeText={(text: string) =>
+						setNewAddress({
+							...newAddress,
+							address: text,
+						})
+					}
+					placeholder='Complete address*'
+					style={styles.cardTextInput}
+					autoComplete='name'
+					inputMode='text'
+					keyboardType='default'
+					textContentType='name'
+					multiline={true}
+				/>
+				<BottomSheetTextInput
+					defaultValue={newAddress.floor}
+					onChangeText={(text: string) =>
+						setNewAddress({
+							...newAddress,
+							floor: text,
+						})
+					}
+					placeholder='Floor (optional)'
+					style={styles.cardTextInput}
+					autoComplete='name'
+					inputMode='text'
+					keyboardType='default'
+					textContentType='name'
+				/>
+				<BottomSheetTextInput
+					defaultValue={newAddress.landmark}
+					onChangeText={(text: string) =>
+						setNewAddress({
+							...newAddress,
+							landmark: text,
+						})
+					}
+					placeholder='Nearby landmark (optional)'
+					style={styles.cardTextInput}
+					autoComplete='name'
+					inputMode='text'
+					keyboardType='default'
+					textContentType='name'
+				/>
+			</View>
+		);
+	};
 
 	return (
 		<View style={{ flexGrow: 1 }}>
@@ -87,7 +421,6 @@ const LocationScreen: React.FC<
 				backgroundColor={'transparent'}
 				hidden={false}
 			/>
-
 			<KeyboardAvoidingView
 				style={{ flexGrow: 1 }}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -109,12 +442,14 @@ const LocationScreen: React.FC<
 						]}
 					>
 						<View style={{ flexDirection: 'row' }}>
-							<Ionicons
-								name='chevron-back-circle'
-								size={getWidthnHeight(11).width}
-								color={colors.primaryRed}
-								style={{ alignSelf: 'center' }}
-							/>
+							<Pressable onPress={() => navigation.goBack()}>
+								<Ionicons
+									name='chevron-back-circle'
+									size={getWidthnHeight(11).width}
+									color={colors.primaryRed}
+									style={{ alignSelf: 'center' }}
+								/>
+							</Pressable>
 							<Searchbar
 								placeholder='Search here...'
 								value={searchText}
@@ -154,7 +489,16 @@ const LocationScreen: React.FC<
 							showsUserLocation={true}
 							showsMyLocationButton={false}
 						/>
-						<View style={styles.markerFixed} pointerEvents='none'>
+						<View
+							style={[
+								styles.markerFixed,
+								fromAddressScreen &&
+									address && {
+										bottom: '55%',
+									},
+							]}
+							pointerEvents='none'
+						>
 							<Text
 								style={[
 									styles.markerText,
@@ -164,20 +508,41 @@ const LocationScreen: React.FC<
 								Current Location
 							</Text>
 							<Text style={[styles.markerText]}>
-								Industrial Area, Sector 74, Sahibzada Ajit Singh
-								Nagar, Punjab 160055
+								{newAddress.address}
 							</Text>
 						</View>
 						<View
-							style={{
-								position: 'absolute',
-								borderRadius: 9,
-								bottom: '50%',
-								left: getWidthnHeight(47.5).width,
-							}}
+							style={[
+								{
+									position: 'absolute',
+									borderRadius: 9,
+									bottom: '50%',
+									left: getWidthnHeight(48).width,
+								},
+								fromAddressScreen &&
+									address && {
+										bottom: '54%',
+									},
+							]}
 							pointerEvents='none'
 						>
 							<View style={[styles.TriangleShapeCSS]} />
+						</View>
+						<View
+							style={[
+								{
+									position: 'absolute',
+									borderRadius: 9,
+									bottom: '50%',
+								},
+							]}
+							pointerEvents='none'
+						>
+							<MaterialIcons
+								name='location-pin'
+								color={colors.primaryRed}
+								size={getWidthnHeight(7).width}
+							/>
 						</View>
 					</View>
 					<View
@@ -215,7 +580,7 @@ const LocationScreen: React.FC<
 										},
 									]}
 								>
-									Phase 8B
+									{neighborhood}
 								</Text>
 								<Text
 									style={[
@@ -226,54 +591,95 @@ const LocationScreen: React.FC<
 										},
 									]}
 								>
-									Industrial Area, Sector 74, Sahibzada Ajit
-									Singh Nagar, Punjab 160055
+									{newAddress.address}
 								</Text>
 							</View>
 						</View>
-						<View
-							style={{
-								flexDirection: 'row',
-								justifyContent: 'space-evenly',
-								alignItems: 'center',
-							}}
-						>
+						{fromAddressScreen && address ? (
 							<Button
 								mode='contained'
 								style={[
 									{
-										width: getWidthnHeight(60).width,
+										width: getWidthnHeight(90).width,
 										borderRadius: 9,
+										alignSelf: 'center',
 									},
 								]}
-								onPress={getCurrentLocation}
+								onPress={() => {
+									setCustomBottomSheet({
+										...customBottomSheet,
+										handleTitle: 'Enter Complete address',
+										bottomSheetChildren: (
+											<AddressBottomSheetChildren />
+										),
+										buttonText: 'Save Address',
+									});
+									bottomSheetRef.current?.snapToIndex(0);
+								}}
 								buttonColor={colors.primaryButton}
 								labelStyle={styles.btnText}
 							>
-								Use Current Location
+								Enter Complete Address
 							</Button>
-							<Button
-								mode='text'
-								style={[{ width: getWidthnHeight(20).width }]}
-								contentStyle={{ flexDirection: 'row-reverse' }}
-								onPress={skip}
-								buttonColor={'white'}
-								textColor='black'
-								icon={() => (
-									<Ionicons
-										name='chevron-forward-circle'
-										size={getWidthnHeight(6).width}
-										color={colors.primaryButton}
-									/>
-								)}
-								labelStyle={styles.btnText}
+						) : (
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'space-evenly',
+									alignItems: 'center',
+								}}
 							>
-								Skip
-							</Button>
-						</View>
+								<Button
+									mode='contained'
+									style={[
+										{
+											width: getWidthnHeight(60).width,
+											borderRadius: 9,
+										},
+									]}
+									onPress={getCurrentLocation}
+									buttonColor={colors.primaryButton}
+									labelStyle={styles.btnText}
+								>
+									Use Current Location
+								</Button>
+								<Button
+									mode='text'
+									style={[
+										{ width: getWidthnHeight(20).width },
+									]}
+									contentStyle={{
+										flexDirection: 'row-reverse',
+									}}
+									onPress={skip}
+									buttonColor={'white'}
+									textColor='black'
+									icon={() => (
+										<Ionicons
+											name='chevron-forward-circle'
+											size={getWidthnHeight(6).width}
+											color={colors.primaryButton}
+										/>
+									)}
+									labelStyle={styles.btnText}
+								>
+									Skip
+								</Button>
+							</View>
+						)}
 					</View>
 				</ScrollView>
 			</KeyboardAvoidingView>
+			{/* @ts-ignore */}
+			<BottomSheetComponent
+				ref={bottomSheetRef}
+				snapPoints={animatedSnapPoints}
+				handleHeight={animatedHandleHeight}
+				contentHeight={animatedContentHeight}
+				handleContentLayout={handleContentLayout}
+				onChange={handleSheetChanges}
+				customHandle={customBottomSheet}
+			/>
 		</View>
 	);
 };
@@ -319,6 +725,49 @@ const styles = StyleSheet.create({
 	},
 	btnText: {
 		fontSize: getWidthnHeight(4).width,
+	},
+	addressBottomSheet: {
+		paddingVertical: getWidthnHeight(3).width,
+	},
+	nickname: {
+		color: colors.lightInputGrey,
+		alignSelf: 'flex-start',
+		fontSize: getWidthnHeight(3.5).width,
+		paddingBottom: getWidthnHeight(3.5).width,
+		fontFamily: fonts.Oxygen,
+	},
+	chip: {
+		paddingVertical: getWidthnHeight(1).width,
+		paddingHorizontal: getWidthnHeight(2.7).width,
+		marginRight: getWidthnHeight(2.7).width,
+		borderRadius: 9,
+		borderColor: colors.lightInputGrey,
+		borderWidth: 1,
+		color: 'black',
+		overflow: 'hidden',
+		fontFamily: fonts.Oxygen,
+		fontSize: getWidthnHeight(3.5).width,
+		textAlign: 'center',
+		textAlignVertical: 'center',
+	},
+	selectedChip: {
+		backgroundColor: colors.primaryRed,
+		color: 'white',
+		borderColor: colors.primaryRed,
+	},
+	chipContainer: {
+		flexDirection: 'row',
+		paddingBottom: getWidthnHeight(2.5).width,
+	},
+	cardTextInput: {
+		borderWidth: 1,
+		borderRadius: 5,
+		borderColor: colors.lightInputGrey,
+		paddingLeft: getWidthnHeight(3).width,
+		paddingVertical: getWidthnHeight(2).width,
+		marginBottom: getWidthnHeight(3).width,
+		fontFamily: fonts.Oxygen,
+		fontSize: getWidthnHeight(3.5).width,
 	},
 });
 

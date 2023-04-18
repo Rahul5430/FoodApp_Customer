@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:geolocation.swift">
+   </FileRef>
+   <FileRef
       location = "group:FoodApp_Customer.xcodeproj">
    </FileRef>
    <FileRef

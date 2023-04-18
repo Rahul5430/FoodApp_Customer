@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,59 +7,107 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { getWidthnHeight } from '../../helpers/responsiveFontSize';
 import ScreenWithImageHeader from '../../layouts/ScreenWithImageHeader';
 import { colors, fonts } from '../../themes';
-import { AuthenticatedStackScreenProps } from '../../types/navigation';
+import { Address, AuthenticatedStackScreenProps } from '../../types/navigation';
 
 const AddressScreen: React.FC<
 	AuthenticatedStackScreenProps<'AddressScreen'>
-> = () => {
-	const addressData = [
+> = ({ navigation }) => {
+	const addressData: Address[] = [
 		{
-			key: 'Home-1',
+			id: 'Home-1',
 			label: 'Home',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			coords: {
+				latitude: 30.709597189331838,
+				longitude: 76.68947006872848,
+				latitudeDelta: 0.015,
+				longitudeDelta: 0.0121,
+			},
 		},
 		{
-			key: 'Work-1',
+			id: 'Work-1',
 			label: 'Work',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			coords: {
+				latitude: 30.709597189331838,
+				longitude: 76.68947006872848,
+				latitudeDelta: 0.015,
+				longitudeDelta: 0.0121,
+			},
 		},
 		{
-			key: 'Home-2',
+			id: 'Home-2',
 			label: 'Home',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			coords: {
+				latitude: 30.709597189331838,
+				longitude: 76.68947006872848,
+				latitudeDelta: 0.015,
+				longitudeDelta: 0.0121,
+			},
 		},
 		{
-			key: 'Work-2',
+			id: 'Work-2',
 			label: 'Work',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			coords: {
+				latitude: 30.709597189331838,
+				longitude: 76.68947006872848,
+				latitudeDelta: 0.015,
+				longitudeDelta: 0.0121,
+			},
 		},
 		{
-			key: 'Other-1',
+			id: 'Other-1',
 			label: 'Other',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			coords: {
+				latitude: 30.709597189331838,
+				longitude: 76.68947006872848,
+				latitudeDelta: 0.015,
+				longitudeDelta: 0.0121,
+			},
 		},
 		{
-			key: 'Home-3',
+			id: 'Home-3',
 			label: 'Home',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			coords: {
+				latitude: 30.709597189331838,
+				longitude: 76.68947006872848,
+				latitudeDelta: 0.015,
+				longitudeDelta: 0.0121,
+			},
 		},
 		{
-			key: 'Work-3',
+			id: 'Work-3',
 			label: 'Work',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			coords: {
+				latitude: 30.709597189331838,
+				longitude: 76.68947006872848,
+				latitudeDelta: 0.015,
+				longitudeDelta: 0.0121,
+			},
 		},
 		{
-			key: 'Other-2',
+			id: 'Other-2',
 			label: 'Other',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			coords: {
+				latitude: 30.709597189331838,
+				longitude: 76.68947006872848,
+				latitudeDelta: 0.015,
+				longitudeDelta: 0.0121,
+			},
 		},
 	];
 
@@ -72,7 +120,7 @@ const AddressScreen: React.FC<
 		>
 			<FlatList
 				data={addressData}
-				keyExtractor={(item) => item.key}
+				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
 					<View style={styles.listItem}>
 						{item.label === 'Home' ? (
@@ -108,7 +156,7 @@ const AddressScreen: React.FC<
 								<Text style={styles.addressLabel}>
 									{item.label}
 								</Text>
-								<View
+								<Pressable
 									style={{
 										backgroundColor: colors.grey,
 										borderRadius: 50,
@@ -117,13 +165,19 @@ const AddressScreen: React.FC<
 										justifyContent: 'center',
 										alignItems: 'center',
 									}}
+									onPress={() =>
+										navigation.navigate('LocationScreen', {
+											fromAddressScreen: true,
+											address: item,
+										})
+									}
 								>
 									<MaterialIcons
 										name='mode-edit'
 										color={colors.primaryRed}
 										size={getWidthnHeight(3.5).width}
 									/>
-								</View>
+								</Pressable>
 							</View>
 							<Text style={styles.address}>{item.address}</Text>
 						</View>
@@ -132,11 +186,20 @@ const AddressScreen: React.FC<
 				ListHeaderComponent={() => (
 					<View style={styles.listHeader}>
 						<Text style={styles.listHeaderText}>Add Address</Text>
-						<Ionicons
-							name='add-circle'
-							color={colors.primaryRed}
-							size={getWidthnHeight(7).width}
-						/>
+						<Pressable
+							onPress={() =>
+								navigation.navigate('LocationScreen', {
+									fromAddressScreen: true,
+									address: undefined,
+								})
+							}
+						>
+							<Ionicons
+								name='add-circle'
+								color={colors.primaryRed}
+								size={getWidthnHeight(7).width}
+							/>
+						</Pressable>
 					</View>
 				)}
 				ItemSeparatorComponent={() => (

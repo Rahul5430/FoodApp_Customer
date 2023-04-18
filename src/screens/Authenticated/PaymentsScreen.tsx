@@ -514,7 +514,7 @@ const PaymentsScreen: React.FC<
 		</View>
 	);
 
-	const AddressBottomSheetChildren = () => {
+	const CardBottomSheetChildren = () => {
 		const [selectedNickName, setSelectedNickName] = useState<
 			'Personal' | 'Business' | 'Other'
 		>('Personal');
@@ -665,7 +665,7 @@ const PaymentsScreen: React.FC<
 												setCustomBottomSheet({
 													handleTitle: 'Add new Card',
 													bottomSheetChildren: (
-														<AddressBottomSheetChildren />
+														<CardBottomSheetChildren />
 													),
 													buttonText: 'Add Card',
 												});
@@ -804,6 +804,8 @@ const styles = StyleSheet.create({
 		overflow: 'hidden',
 		fontFamily: fonts.Oxygen,
 		fontSize: getWidthnHeight(3.5).width,
+		textAlign: 'center',
+		textAlignVertical: 'center',
 	},
 	selectedChip: {
 		backgroundColor: colors.primaryRed,
