@@ -3,6 +3,7 @@ import React from 'react';
 import {
 	Animated,
 	ImageBackground,
+	Platform,
 	Pressable,
 	StatusBarProps,
 	StyleProp,
@@ -91,13 +92,19 @@ const ScreenWithImageHeader = ({
 			<Surface
 				style={[
 					styles.container,
-					{
-						marginBottom: bottomSafeAreaInset,
-						minHeight:
-							remainingHeight -
-							getWidthnHeight(100, 5, 'screen').height,
-						maxHeight: remainingHeight,
-					},
+					{ marginBottom: bottomSafeAreaInset },
+					Platform.OS === 'ios'
+						? {
+								height:
+									remainingHeight -
+									getWidthnHeight(100, 5, 'screen').height,
+						  }
+						: {
+								minHeight:
+									remainingHeight -
+									getWidthnHeight(100, 5, 'screen').height,
+								maxHeight: remainingHeight,
+						  },
 					containerStyle,
 				]}
 				elevation={2}
@@ -117,7 +124,7 @@ const styles = StyleSheet.create({
 		fontFamily: fonts.Pattaya,
 	},
 	container: {
-		borderRadius: 16,
+		borderRadius: 23,
 		backgroundColor: 'white',
 		marginHorizontal: getWidthnHeight(5).width,
 		paddingHorizontal: getWidthnHeight(5).width,

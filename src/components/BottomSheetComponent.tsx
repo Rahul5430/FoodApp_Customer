@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { getWidthnHeight } from '../helpers/responsiveFontSize';
-import { colors } from '../themes';
+import { colors, fonts } from '../themes';
 
 export interface CustomBottomSheetProps {
 	handleTitle: string;
@@ -26,12 +26,8 @@ export interface CustomBottomSheetProps {
 }
 
 interface BottomSheetComponentProps extends BottomSheetProps {
-	setIsBottomSheetOpen: (isOpen: boolean) => void;
 	customHandle: CustomBottomSheetProps;
 	handleContentLayout: (event: LayoutChangeEvent) => void;
-	animatedSnapPoints: Array<number | string>;
-	animatedHandleHeight: number;
-	animatedContentHeight: number;
 }
 
 const BottomSheetComponent = React.forwardRef<
@@ -40,9 +36,9 @@ const BottomSheetComponent = React.forwardRef<
 >(
 	(
 		{
-			animatedSnapPoints,
-			animatedHandleHeight,
-			animatedContentHeight,
+			snapPoints,
+			handleHeight,
+			contentHeight,
 			onChange,
 			customHandle,
 			handleContentLayout,
@@ -69,9 +65,9 @@ const BottomSheetComponent = React.forwardRef<
 				index={-1}
 				onChange={onChange}
 				backdropComponent={renderBackdrop}
-				snapPoints={animatedSnapPoints}
-				handleHeight={animatedHandleHeight}
-				contentHeight={animatedContentHeight}
+				snapPoints={snapPoints}
+				handleHeight={handleHeight}
+				contentHeight={contentHeight}
 				keyboardBlurBehavior='restore'
 				enableContentPanningGesture={false}
 				enableHandlePanningGesture={false}
@@ -90,8 +86,8 @@ const BottomSheetComponent = React.forwardRef<
 						<Text
 							style={{
 								fontSize: getWidthnHeight(6).width,
-								fontWeight: 'bold',
 								color: 'black',
+								fontFamily: fonts.OxygenBold,
 							}}
 						>
 							{customHandle.handleTitle}
@@ -144,6 +140,7 @@ const BottomSheetComponent = React.forwardRef<
 const styles = StyleSheet.create({
 	btnText: {
 		fontSize: getWidthnHeight(3.7).width,
+		fontFamily: fonts.OxygenBold,
 	},
 });
 

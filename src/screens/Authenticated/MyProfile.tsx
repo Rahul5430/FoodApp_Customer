@@ -1,6 +1,7 @@
 import {
 	FlatList,
 	Image,
+	Platform,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
@@ -69,9 +70,7 @@ const MyProfile: React.FC<AuthenticatedStackScreenProps<'MyProfile'>> = ({
 				/>
 			),
 			name: 'Address',
-			onPress: () => {
-				console.log('Pressed Address');
-			},
+			onPress: () => navigation.navigate('AddressScreen'),
 		},
 		{
 			icon: (
@@ -142,6 +141,11 @@ const MyProfile: React.FC<AuthenticatedStackScreenProps<'MyProfile'>> = ({
 		<ScreenWithImageHeader
 			title='My Profile'
 			titleStyle={{ fontFamily: fonts.Ovo }}
+			containerStyle={[
+				Platform.OS === 'ios' && {
+					paddingBottom: getWidthnHeight(5).width,
+				},
+			]}
 		>
 			<View
 				style={{

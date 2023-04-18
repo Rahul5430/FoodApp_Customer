@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
 import BottomSheet, {
 	BottomSheetTextInput,
 	TouchableOpacity,
@@ -17,8 +16,6 @@ import {
 	BackHandler,
 	FlatList,
 	Image,
-	ImageSourcePropType,
-	Keyboard,
 	Pressable,
 	StyleSheet,
 	Text,
@@ -47,60 +44,13 @@ import { numberWithSpace } from '../../helpers/utils';
 import ScreenWithImageHeader from '../../layouts/ScreenWithImageHeader';
 import { colors, fonts } from '../../themes';
 import { AuthenticatedStackScreenProps } from '../../types/navigation';
-
-type CommonTypes = {
-	setCustomBottomSheet: (data: CustomBottomSheetProps) => void;
-};
-
-type CardsType = {
-	name: string;
-	cardType: ImageSourcePropType;
-	logo: ImageSourcePropType;
-	number: string;
-} & CommonTypes;
-
-type UPIType = {
-	name: string;
-	logo: ImageSourcePropType;
-	linked: boolean;
-};
-
-type WalletsType = {
-	name: string;
-	logo: ImageSourcePropType;
-	balance: string;
-	phoneNumber: string;
-	linked: boolean;
-} & CommonTypes;
-
-type WalletComponentType = {
-	item: WalletsType;
-	phoneNumber: string;
-	setPhoneNumber: (phoneNumber: string) => void;
-} & CommonTypes;
-
-type PaymentCardType<T extends 'Cards'> = {
-	heading: T;
-	data: CardsType[];
-};
-
-type PaymentUPIType<T extends 'UPI'> = {
-	heading: T;
-	data: UPIType[];
-};
-
-type PaymentWalletType<T extends 'Wallets'> = {
-	heading: T;
-	data: WalletsType[];
-};
-
-type PaymentsDataType<T extends 'Cards' | 'UPI' | 'Wallets'> = T extends 'Cards'
-	? PaymentCardType<T>
-	: T extends 'UPI'
-	? PaymentUPIType<T>
-	: T extends 'Wallets'
-	? PaymentWalletType<T>
-	: null;
+import {
+	CardsType,
+	PaymentsDataType,
+	UPIType,
+	WalletComponentType,
+	WalletsType,
+} from '../../types/payment';
 
 const Cards = ({ item }: { item: CardsType }) => {
 	const { height, width } = Image.resolveAssetSource(item.logo);
@@ -219,7 +169,7 @@ const Wallets = React.forwardRef<BottomSheet, WalletComponentType>(
 		useEffect(() => {
 			if (isOpen) {
 				const timer = setTimeout(
-					() => swipeableRef.current.close(),
+					() => swipeableRef.current?.close(),
 					3000
 				);
 
@@ -243,7 +193,7 @@ const Wallets = React.forwardRef<BottomSheet, WalletComponentType>(
 						style={{
 							backgroundColor: colors.grey,
 							borderRadius: 50,
-							marginLeft: getWidthnHeight(6).width,
+							marginLeft: getWidthnHeight(8).width,
 							width: getWidthnHeight(6).width,
 							height: getWidthnHeight(6).width,
 							justifyContent: 'center',
@@ -300,66 +250,32 @@ const Wallets = React.forwardRef<BottomSheet, WalletComponentType>(
 							justifyContent: 'center',
 						}}
 					>
-						<Swipeable
-							ref={swipeableRef}
-							onSwipeableOpen={(direction) => {
-								console.log(direction);
-								setIsOpen(true);
+						<View
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'flex-end',
+								backgroundColor: 'white',
+								minHeight: 34,
 							}}
-							onSwipeableClose={(direction) => {
-								console.log(direction);
-								setIsOpen(false);
-							}}
-							renderRightActions={() => (
-								<View
-									style={{
-										backgroundColor: colors.grey,
-										borderRadius: 50,
-										marginLeft: getWidthnHeight(6).width,
-										width: getWidthnHeight(6).width,
-										height: getWidthnHeight(6).width,
-										justifyContent: 'center',
-										alignItems: 'center',
-										alignSelf: 'center',
-									}}
-								>
-									<Feather
-										name='trash-2'
-										color={colors.black}
-										size={getWidthnHeight(3.5).width}
-									/>
-								</View>
-							)}
-							overshootLeft={false}
-							overshootRight={false}
 						>
-							<View
-								style={{
-									flexDirection: 'row',
-									alignItems: 'center',
-									justifyContent: 'flex-end',
-									backgroundColor: 'white',
-									minHeight: 34,
-								}}
+							<Text
+								style={[
+									styles.subItemName,
+									{
+										color: colors.darkGrey,
+										fontSize: getWidthnHeight(4).width,
+									},
+								]}
 							>
-								<Text
-									style={[
-										styles.subItemName,
-										{
-											color: colors.darkGrey,
-											fontSize: getWidthnHeight(4).width,
-										},
-									]}
-								>
-									<FontAwesome
-										name='rupee'
-										size={getWidthnHeight(3.5).width}
-										color={colors.darkGrey}
-									/>
-									{item.balance}
-								</Text>
-							</View>
-						</Swipeable>
+								<FontAwesome
+									name='rupee'
+									size={getWidthnHeight(3.5).width}
+									color={colors.darkGrey}
+								/>
+								{item.balance}
+							</Text>
+						</View>
 					</View>
 				</View>
 			</Swipeable>
@@ -434,7 +350,8 @@ const Wallets = React.forwardRef<BottomSheet, WalletComponentType>(
 							),
 							buttonText: 'Confirm and Pay',
 						});
-						bottomSheetRef.current.snapToIndex(0);
+						// @ts-ignore
+						bottomSheetRef?.current?.snapToIndex(0);
 					}}
 				>
 					<Ionicons
@@ -461,9 +378,6 @@ const PaymentsScreen: React.FC<
 			bottomSheetChildren: null,
 			buttonText: '',
 		});
-	const [selectedNickName, setSelectedNickName] = useState<
-		'Personal' | 'Business' | 'Other'
-	>('Personal');
 	const [card, setCard] = useState({
 		nickName: '',
 		name: '',
@@ -552,7 +466,7 @@ const PaymentsScreen: React.FC<
 			const onBackPress = () => {
 				console.log(isBottomSheetOpen);
 				if (isBottomSheetOpen) {
-					bottomSheetRef.current.close();
+					bottomSheetRef.current?.close();
 					return true;
 				} else {
 					return false;
@@ -575,6 +489,149 @@ const PaymentsScreen: React.FC<
 		handleContentLayout,
 	} = useBottomSheetDynamicSnapPoints(initialSnapPoints);
 
+	const UPIBottomSheetChildren = () => (
+		<View style={styles.UBSStyle}>
+			<BottomSheetTextInput
+				defaultValue={upiID}
+				onChangeText={(text: string) => setUpiID(text)}
+				placeholder='Enter your UPI ID'
+				style={styles.UBSTI}
+				autoComplete='name'
+				inputMode='text'
+				keyboardType='default'
+				textContentType='name'
+			/>
+			<View style={styles.UBSTV}>
+				<MaterialIcons
+					name='verified-user'
+					size={getWidthnHeight(4).width}
+					color={colors.green}
+				/>
+				<Text style={styles.UBSTS}>
+					This UPI Will Be Saved For Faster Payments
+				</Text>
+			</View>
+		</View>
+	);
+
+	const AddressBottomSheetChildren = () => {
+		const [selectedNickName, setSelectedNickName] = useState<
+			'Personal' | 'Business' | 'Other'
+		>('Personal');
+
+		return (
+			<View style={styles.addressBottomSheet}>
+				<Text style={styles.nickname}>Nickname for card</Text>
+				<View style={styles.chipContainer}>
+					<TouchableOpacity
+						onPress={() => setSelectedNickName('Personal')}
+					>
+						<Text
+							style={[
+								styles.chip,
+								selectedNickName === 'Personal' &&
+									styles.selectedChip,
+							]}
+						>
+							Personal
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => {
+							console.log(customBottomSheet);
+							setSelectedNickName('Business');
+						}}
+					>
+						<Text
+							style={[
+								styles.chip,
+								selectedNickName === 'Business' &&
+									styles.selectedChip,
+							]}
+						>
+							Business
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => setSelectedNickName('Other')}
+					>
+						<Text
+							style={[
+								styles.chip,
+								selectedNickName === 'Other' &&
+									styles.selectedChip,
+							]}
+						>
+							Other
+						</Text>
+					</TouchableOpacity>
+				</View>
+				{selectedNickName === 'Other' && (
+					<BottomSheetTextInput
+						defaultValue={card.nickName}
+						onChangeText={(text: string) =>
+							setCard({
+								...card,
+								nickName: text,
+							})
+						}
+						placeholder='Enter nickname for card'
+						style={styles.cardTextInput}
+						autoComplete='name'
+						inputMode='text'
+						keyboardType='default'
+						textContentType='name'
+					/>
+				)}
+				<BottomSheetTextInput
+					defaultValue={card.name}
+					onChangeText={(text: string) =>
+						setCard({
+							...card,
+							name: text,
+						})
+					}
+					placeholder='Name on card'
+					style={styles.cardTextInput}
+					autoComplete='name'
+					inputMode='text'
+					keyboardType='default'
+					textContentType='name'
+				/>
+				<BottomSheetTextInput
+					defaultValue={card.cardNumber}
+					onChangeText={(text: string) =>
+						setCard({
+							...card,
+							cardNumber: text,
+						})
+					}
+					placeholder='Card number'
+					style={styles.cardTextInput}
+					autoComplete='name'
+					inputMode='text'
+					keyboardType='default'
+					textContentType='name'
+				/>
+				<BottomSheetTextInput
+					defaultValue={card.expiryDate}
+					onChangeText={(text: string) =>
+						setCard({
+							...card,
+							expiryDate: text,
+						})
+					}
+					placeholder='Expiry date (MM/YY)'
+					style={styles.cardTextInput}
+					autoComplete='name'
+					inputMode='text'
+					keyboardType='default'
+					textContentType='name'
+				/>
+			</View>
+		);
+	};
+
 	return (
 		<React.Fragment>
 			<ScreenWithImageHeader
@@ -586,7 +643,7 @@ const PaymentsScreen: React.FC<
 				<FlatList
 					data={paymentsData}
 					keyExtractor={(item) => item.heading}
-					renderItem={({ item, index }) => (
+					renderItem={({ item }) => (
 						<View>
 							<View style={styles.categoryBox}>
 								<Text style={styles.heading}>
@@ -599,259 +656,23 @@ const PaymentsScreen: React.FC<
 												setCustomBottomSheet({
 													handleTitle: 'Add new UPI',
 													bottomSheetChildren: (
-														<View
-															style={
-																styles.UBSStyle
-															}
-														>
-															<BottomSheetTextInput
-																defaultValue={
-																	upiID
-																}
-																onChangeText={(
-																	text: string
-																) =>
-																	setUpiID(
-																		text
-																	)
-																}
-																placeholder='Enter your UPI ID'
-																style={
-																	styles.UBSTI
-																}
-																autoComplete='name'
-																inputMode='text'
-																keyboardType='default'
-																textContentType='name'
-															/>
-															<View
-																style={
-																	styles.UBSTV
-																}
-															>
-																<MaterialIcons
-																	name='verified-user'
-																	size={
-																		getWidthnHeight(
-																			4
-																		).width
-																	}
-																	color={
-																		colors.green
-																	}
-																/>
-																<Text
-																	style={
-																		styles.UBSTS
-																	}
-																>
-																	This UPI
-																	Will Be
-																	Saved For
-																	Faster
-																	Payments
-																</Text>
-															</View>
-														</View>
+														<UPIBottomSheetChildren />
 													),
 													buttonText:
 														'Verify and Pay',
 												});
-												bottomSheetRef.current.snapToIndex(
-													0
-												);
 											} else {
 												setCustomBottomSheet({
 													handleTitle: 'Add new Card',
 													bottomSheetChildren: (
-														<View
-															style={{
-																paddingVertical:
-																	getWidthnHeight(
-																		3
-																	).width,
-															}}
-														>
-															<Text
-																style={
-																	styles.nickname
-																}
-															>
-																Nickname for
-																card
-															</Text>
-															<View
-																style={
-																	styles.chipContainer
-																}
-															>
-																<TouchableOpacity
-																	onPress={() =>
-																		setSelectedNickName(
-																			'Personal'
-																		)
-																	}
-																>
-																	<Text
-																		style={[
-																			styles.chip,
-																			selectedNickName ===
-																				'Personal' && {
-																				backgroundColor:
-																					colors.primaryRed,
-																				color: 'white',
-																				borderWidth: 0,
-																			},
-																		]}
-																	>
-																		Personal
-																	</Text>
-																</TouchableOpacity>
-																<TouchableOpacity
-																	onPress={() =>
-																		setSelectedNickName(
-																			'Business'
-																		)
-																	}
-																>
-																	<Text
-																		style={[
-																			styles.chip,
-																			selectedNickName ===
-																				'Business' && {
-																				backgroundColor:
-																					colors.primaryRed,
-																				color: 'white',
-																				borderWidth: 0,
-																			},
-																		]}
-																	>
-																		Business
-																	</Text>
-																</TouchableOpacity>
-																<TouchableOpacity
-																	onPress={() =>
-																		setSelectedNickName(
-																			'Other'
-																		)
-																	}
-																>
-																	<Text
-																		style={[
-																			styles.chip,
-																			selectedNickName ===
-																				'Other' && {
-																				backgroundColor:
-																					colors.primaryRed,
-																				color: 'white',
-																				borderWidth: 0,
-																			},
-																		]}
-																	>
-																		Other
-																	</Text>
-																</TouchableOpacity>
-															</View>
-															{selectedNickName ===
-																'Other' && (
-																<BottomSheetTextInput
-																	defaultValue={
-																		card.nickName
-																	}
-																	onChangeText={(
-																		text: string
-																	) =>
-																		setCard(
-																			{
-																				...card,
-																				nickName:
-																					text,
-																			}
-																		)
-																	}
-																	placeholder='Enter nickname for card'
-																	style={
-																		styles.cardTextInput
-																	}
-																	autoComplete='name'
-																	inputMode='text'
-																	keyboardType='default'
-																	textContentType='name'
-																/>
-															)}
-															<BottomSheetTextInput
-																defaultValue={
-																	card.name
-																}
-																onChangeText={(
-																	text: string
-																) =>
-																	setCard({
-																		...card,
-																		name: text,
-																	})
-																}
-																placeholder='Name on card'
-																style={
-																	styles.cardTextInput
-																}
-																autoComplete='name'
-																inputMode='text'
-																keyboardType='default'
-																textContentType='name'
-															/>
-															<BottomSheetTextInput
-																defaultValue={
-																	card.cardNumber
-																}
-																onChangeText={(
-																	text: string
-																) =>
-																	setCard({
-																		...card,
-																		cardNumber:
-																			text,
-																	})
-																}
-																placeholder='Card number'
-																style={
-																	styles.cardTextInput
-																}
-																autoComplete='name'
-																inputMode='text'
-																keyboardType='default'
-																textContentType='name'
-															/>
-															<BottomSheetTextInput
-																defaultValue={
-																	card.expiryDate
-																}
-																onChangeText={(
-																	text: string
-																) =>
-																	setCard({
-																		...card,
-																		expiryDate:
-																			text,
-																	})
-																}
-																placeholder='Expiry date (MM/YY)'
-																style={
-																	styles.cardTextInput
-																}
-																autoComplete='name'
-																inputMode='text'
-																keyboardType='default'
-																textContentType='name'
-															/>
-														</View>
+														<AddressBottomSheetChildren />
 													),
 													buttonText: 'Add Card',
 												});
-												bottomSheetRef.current.snapToIndex(
-													0
-												);
 											}
+											bottomSheetRef.current?.snapToIndex(
+												0
+											);
 										}}
 									>
 										<Ionicons
@@ -863,16 +684,19 @@ const PaymentsScreen: React.FC<
 								)}
 							</View>
 							<FlatList
+								// @ts-ignore
 								data={item.data}
 								keyExtractor={(subItem) => subItem.name}
 								renderItem={(subItem) => {
 									return item.heading === 'Cards' ? (
 										<Cards item={subItem.item} />
 									) : item.heading === 'UPI' ? (
+										// @ts-ignore
 										<UPI item={subItem.item} />
 									) : (
 										<Wallets
 											ref={bottomSheetRef}
+											// @ts-ignore
 											item={subItem.item}
 											setCustomBottomSheet={
 												setCustomBottomSheet
@@ -933,11 +757,12 @@ const PaymentsScreen: React.FC<
 					scrollEnabled
 				/>
 			</ScreenWithImageHeader>
+			{/* @ts-ignore */}
 			<BottomSheetComponent
 				ref={bottomSheetRef}
-				animatedSnapPoints={animatedSnapPoints}
-				animatedHandleHeight={animatedHandleHeight}
-				animatedContentHeight={animatedContentHeight}
+				snapPoints={animatedSnapPoints}
+				handleHeight={animatedHandleHeight}
+				contentHeight={animatedContentHeight}
 				handleContentLayout={handleContentLayout}
 				onChange={handleSheetChanges}
 				customHandle={customBottomSheet}
@@ -977,6 +802,13 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		color: 'black',
 		overflow: 'hidden',
+		fontFamily: fonts.Oxygen,
+		fontSize: getWidthnHeight(3.5).width,
+	},
+	selectedChip: {
+		backgroundColor: colors.primaryRed,
+		color: 'white',
+		borderColor: colors.primaryRed,
 	},
 	categoryBox: {
 		flexDirection: 'row',
@@ -994,6 +826,8 @@ const styles = StyleSheet.create({
 		borderColor: colors.lightInputGrey,
 		paddingLeft: getWidthnHeight(3).width,
 		paddingVertical: getWidthnHeight(3).width,
+		fontFamily: fonts.Oxygen,
+		fontSize: getWidthnHeight(3.5).width,
 	},
 	UBSTV: {
 		flexDirection: 'row',
@@ -1005,12 +839,14 @@ const styles = StyleSheet.create({
 		alignSelf: 'flex-start',
 		fontSize: getWidthnHeight(3.5).width,
 		paddingLeft: getWidthnHeight(1).width,
+		fontFamily: fonts.Oxygen,
 	},
 	nickname: {
 		color: colors.lightInputGrey,
 		alignSelf: 'flex-start',
 		fontSize: getWidthnHeight(3.5).width,
 		paddingBottom: getWidthnHeight(3.5).width,
+		fontFamily: fonts.Oxygen,
 	},
 	chipContainer: {
 		flexDirection: 'row',
@@ -1023,6 +859,8 @@ const styles = StyleSheet.create({
 		paddingLeft: getWidthnHeight(3).width,
 		paddingVertical: getWidthnHeight(2).width,
 		marginBottom: getWidthnHeight(3).width,
+		fontFamily: fonts.Oxygen,
+		fontSize: getWidthnHeight(3.5).width,
 	},
 	walletContainer: {
 		paddingVertical: getWidthnHeight(6).width,
@@ -1032,8 +870,8 @@ const styles = StyleSheet.create({
 		paddingLeft: getWidthnHeight(5).width,
 	},
 	walletTitle: {
-		fontSize: getWidthnHeight(5.5).width,
-		fontWeight: 'bold',
+		fontSize: getWidthnHeight(5).width,
+		fontFamily: fonts.OxygenBold,
 		color: 'black',
 		flex: 1,
 	},
@@ -1043,12 +881,18 @@ const styles = StyleSheet.create({
 		fontSize: getWidthnHeight(3.5).width,
 		paddingTop: getWidthnHeight(1).width,
 		paddingBottom: getWidthnHeight(4).width,
+		fontFamily: fonts.Oxygen,
 	},
 	walletTextInput: {
 		borderWidth: 1,
 		borderRadius: 5,
 		borderColor: colors.lightInputGrey,
 		paddingLeft: getWidthnHeight(3).width,
+		paddingVertical: getWidthnHeight(3).width,
+		fontFamily: fonts.Oxygen,
+		fontSize: getWidthnHeight(3.5).width,
+	},
+	addressBottomSheet: {
 		paddingVertical: getWidthnHeight(3).width,
 	},
 });
