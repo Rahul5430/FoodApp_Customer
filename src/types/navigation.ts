@@ -5,8 +5,8 @@ export type Address = {
 	id: string;
 	label: string;
 	address: string;
-	floor?: string;
-	landmark?: string;
+	floor: string;
+	landmark: string;
 	coords: Region;
 };
 

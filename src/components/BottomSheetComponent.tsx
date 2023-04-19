@@ -28,6 +28,7 @@ export interface CustomBottomSheetProps {
 interface BottomSheetComponentProps extends BottomSheetProps {
 	customHandle: CustomBottomSheetProps;
 	handleContentLayout: (event: LayoutChangeEvent) => void;
+	buttonOnpress: () => void;
 }
 
 const BottomSheetComponent = React.forwardRef<
@@ -42,6 +43,7 @@ const BottomSheetComponent = React.forwardRef<
 			onChange,
 			customHandle,
 			handleContentLayout,
+			buttonOnpress,
 		},
 		bottomSheetRef
 	) => {
@@ -111,6 +113,7 @@ const BottomSheetComponent = React.forwardRef<
 				<BottomSheetView
 					style={{ paddingHorizontal: getWidthnHeight(4).width }}
 					onLayout={handleContentLayout}
+					// keyboardShouldPersistTaps='handled'
 				>
 					{customHandle.bottomSheetChildren}
 					<Button
@@ -122,7 +125,10 @@ const BottomSheetComponent = React.forwardRef<
 								getWidthnHeight(4).width
 							),
 						}}
-						onPress={() => console.log('Verifying...')}
+						onPress={() => {
+							console.log('Verifying...');
+							buttonOnpress();
+						}}
 						buttonColor={colors.primaryButton}
 						labelStyle={styles.btnText}
 						contentStyle={{

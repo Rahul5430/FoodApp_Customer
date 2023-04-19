@@ -25,19 +25,17 @@ import {
 	ScrollView,
 	StyleSheet,
 	Text,
+	TextInput,
 	ToastAndroid,
 	View,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import MapView, {
-	LatLng,
-	Marker,
-	PROVIDER_GOOGLE,
-	Region,
-} from 'react-native-maps';
+import MapView, { LatLng, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { Button, Searchbar } from 'react-native-paper';
 import Toast from 'react-native-root-toast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -83,11 +81,12 @@ const LocationScreen: React.FC<
 	const [newAddress, setNewAddress] = useState<Address>({
 		id: '',
 		label: '',
-		address:
-			'Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab 160055',
+		address: '',
 		coords: coords,
+		floor: '',
+		landmark: '',
 	});
-	const [neighborhood, setNeighborhood] = useState('Phase 8B');
+	const [neighborhood, setNeighborhood] = useState('');
 	const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 	const [customBottomSheet, setCustomBottomSheet] =
 		useState<CustomBottomSheetProps>({
@@ -228,6 +227,7 @@ const LocationScreen: React.FC<
 		Geolocation.getCurrentPosition(
 			(pos) => {
 				console.log(pos.coords);
+				console.log(coords);
 				setCoords({
 					...coords,
 					latitude: pos.coords.latitude,
@@ -241,6 +241,12 @@ const LocationScreen: React.FC<
 				if (!fromAddressScreen) {
 					dispatch(setLoggedIn(true));
 					AsyncStorage.setItem('token', JSON.stringify({}));
+				} else if (!address) {
+					onRegionChangeComplete({
+						...coords,
+						latitude: pos.coords.latitude,
+						longitude: pos.coords.longitude,
+					});
 				}
 			},
 			(error) => Toast.show(error.message),
@@ -269,10 +275,18 @@ const LocationScreen: React.FC<
 		const response = await fetch(url);
 		const data = await response.json();
 		const street_address = data.results[0];
-		console.log(street_address);
+		console.log(JSON.stringify(street_address, null, 4));
 		const neighborhood = street_address.address_components.find(
 			(item: { types: string[] }) =>
-				item.types.some((subItem) => subItem === 'neighborhood')
+				item.types.some(
+					(subItem) =>
+						subItem === 'neighborhood' ||
+						subItem === 'sublocality' ||
+						subItem === 'sublocality_level_1' ||
+						subItem === 'route' ||
+						subItem === 'locality' ||
+						subItem === 'political'
+				)
 		).long_name;
 		return {
 			formatted_address: street_address.formatted_address as string,
@@ -289,11 +303,24 @@ const LocationScreen: React.FC<
 		console.log('onRegionChangeComplete: ', region);
 		const { formatted_address, neighborhood } = await getAddress(region);
 		setNeighborhood(neighborhood);
-		setNewAddress({
-			...newAddress,
-			coords: region,
-			address: formatted_address,
-		});
+		if (address) {
+			setNewAddress({
+				...newAddress,
+				label: address?.label,
+				coords: region,
+				address: formatted_address,
+			});
+		} else {
+			setNewAddress({
+				...newAddress,
+				coords: region,
+				address: formatted_address,
+			});
+		}
+	};
+
+	const saveAddress = () => {
+		console.log(JSON.stringify(newAddress, null, 4));
 	};
 
 	useEffect(() => {
@@ -310,11 +337,29 @@ const LocationScreen: React.FC<
 			'Home' | 'Work' | 'Other'
 		>('Home');
 
+		const labelRef = useRef<TextInput>(null);
+		const completeAddressRef = useRef<TextInput>(null);
+		const floorRef = useRef<TextInput>(null);
+		const landmarkRef = useRef<TextInput>(null);
+
+		useEffect(() => {
+			setSelectedLabel(
+				address?.label !== 'Home' && address?.label !== 'Work'
+					? 'Other'
+					: address.label
+			);
+		}, [address]);
+
 		return (
 			<View style={styles.addressBottomSheet}>
 				<Text style={styles.nickname}>Save adress as*</Text>
 				<View style={styles.chipContainer}>
-					<TouchableOpacity onPress={() => setSelectedLabel('Home')}>
+					<TouchableOpacity
+						onPress={() => {
+							setSelectedLabel('Home');
+							setNewAddress({ ...newAddress, label: 'Home' });
+						}}
+					>
 						<Text
 							style={[
 								styles.chip,
@@ -324,7 +369,12 @@ const LocationScreen: React.FC<
 							Home
 						</Text>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={() => setSelectedLabel('Work')}>
+					<TouchableOpacity
+						onPress={() => {
+							setSelectedLabel('Work');
+							setNewAddress({ ...newAddress, label: 'Work' });
+						}}
+					>
 						<Text
 							style={[
 								styles.chip,
@@ -334,7 +384,15 @@ const LocationScreen: React.FC<
 							Work
 						</Text>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={() => setSelectedLabel('Other')}>
+					<TouchableOpacity
+						onPress={() => {
+							setSelectedLabel('Other');
+							setNewAddress({
+								...newAddress,
+								label: address?.label || '',
+							});
+						}}
+					>
 						<Text
 							style={[
 								styles.chip,
@@ -348,6 +406,7 @@ const LocationScreen: React.FC<
 				</View>
 				{selectedLabel === 'Other' && (
 					<BottomSheetTextInput
+						ref={labelRef as any}
 						defaultValue={newAddress.label}
 						onChangeText={(text: string) =>
 							setNewAddress({
@@ -361,9 +420,15 @@ const LocationScreen: React.FC<
 						inputMode='text'
 						keyboardType='default'
 						textContentType='name'
+						blurOnSubmit={false}
+						returnKeyType='next'
+						onSubmitEditing={() =>
+							completeAddressRef.current?.focus()
+						}
 					/>
 				)}
 				<BottomSheetTextInput
+					ref={completeAddressRef as any}
 					defaultValue={newAddress.address}
 					onChangeText={(text: string) =>
 						setNewAddress({
@@ -372,14 +437,16 @@ const LocationScreen: React.FC<
 						})
 					}
 					placeholder='Complete address*'
-					style={styles.cardTextInput}
+					style={[styles.cardTextInput, { textAlignVertical: 'top' }]}
 					autoComplete='name'
 					inputMode='text'
 					keyboardType='default'
 					textContentType='name'
 					multiline={true}
+					// numberOfLines={4}
 				/>
 				<BottomSheetTextInput
+					ref={floorRef as any}
 					defaultValue={newAddress.floor}
 					onChangeText={(text: string) =>
 						setNewAddress({
@@ -393,8 +460,12 @@ const LocationScreen: React.FC<
 					inputMode='text'
 					keyboardType='default'
 					textContentType='name'
+					blurOnSubmit={false}
+					returnKeyType='next'
+					onSubmitEditing={() => landmarkRef.current?.focus()}
 				/>
 				<BottomSheetTextInput
+					ref={landmarkRef as any}
 					defaultValue={newAddress.landmark}
 					onChangeText={(text: string) =>
 						setNewAddress({
@@ -442,11 +513,14 @@ const LocationScreen: React.FC<
 						]}
 					>
 						<View style={{ flexDirection: 'row' }}>
-							<Pressable onPress={() => navigation.goBack()}>
-								<Ionicons
-									name='chevron-back-circle'
-									size={getWidthnHeight(11).width}
-									color={colors.primaryRed}
+							<Pressable
+								onPress={() => navigation.goBack()}
+								style={styles.backButton}
+							>
+								<Feather
+									name='chevron-left'
+									size={getWidthnHeight(10).width}
+									color={'white'}
 									style={{ alignSelf: 'center' }}
 								/>
 							</Pressable>
@@ -492,41 +566,70 @@ const LocationScreen: React.FC<
 						<View
 							style={[
 								styles.markerFixed,
-								fromAddressScreen &&
-									address && {
-										bottom: '55%',
-									},
+								fromAddressScreen && {
+									bottom: '55%',
+								},
+								!(neighborhood && newAddress.address) && {
+									backgroundColor: 'transparent',
+								},
 							]}
 							pointerEvents='none'
 						>
-							<Text
-								style={[
-									styles.markerText,
-									{ fontWeight: 'bold' },
-								]}
-							>
-								Current Location
-							</Text>
-							<Text style={[styles.markerText]}>
-								{newAddress.address}
-							</Text>
+							{neighborhood && newAddress.address ? (
+								<View style={styles.markerTextContainer}>
+									<Text
+										style={[
+											styles.markerText,
+											{ fontWeight: 'bold' },
+										]}
+									>
+										Current Location
+									</Text>
+									<Text
+										style={styles.markerText}
+										numberOfLines={2}
+									>
+										{newAddress.address}
+									</Text>
+								</View>
+							) : (
+								<React.Fragment>
+									<SkeletonPlaceholder
+										borderRadius={9}
+										backgroundColor={colors.placeholderGrey}
+									>
+										<View style={styles.markerSkeleton} />
+									</SkeletonPlaceholder>
+									<SkeletonPlaceholder borderRadius={5}>
+										<React.Fragment>
+											<View
+												style={styles.markerSkeletonOne}
+											/>
+											<View
+												style={styles.markerSkeletonTwo}
+											/>
+										</React.Fragment>
+									</SkeletonPlaceholder>
+								</React.Fragment>
+							)}
 						</View>
 						<View
 							style={[
-								{
-									position: 'absolute',
-									borderRadius: 9,
-									bottom: '50%',
-									left: getWidthnHeight(48).width,
+								styles.markerTriangle,
+								fromAddressScreen && {
+									bottom: '54%',
 								},
-								fromAddressScreen &&
-									address && {
-										bottom: '54%',
-									},
 							]}
 							pointerEvents='none'
 						>
-							<View style={[styles.TriangleShapeCSS]} />
+							<View
+								style={[
+									styles.TriangleShapeCSS,
+									!(neighborhood && newAddress.address) && {
+										borderTopColor: colors.placeholderGrey,
+									},
+								]}
+							/>
 						</View>
 						<View
 							style={[
@@ -571,31 +674,53 @@ const LocationScreen: React.FC<
 									paddingRight: getWidthnHeight(6).width,
 								}}
 							>
-								<Text
-									style={[
-										styles.addressText,
-										{
-											fontWeight: 'bold',
-											fontSize: getWidthnHeight(5).width,
-										},
-									]}
-								>
-									{neighborhood}
-								</Text>
-								<Text
-									style={[
-										styles.addressText,
-										{
-											paddingRight:
-												getWidthnHeight(6).width,
-										},
-									]}
-								>
-									{newAddress.address}
-								</Text>
+								{neighborhood && newAddress.address ? (
+									<React.Fragment>
+										<Text
+											style={[
+												styles.addressText,
+												{
+													fontWeight: 'bold',
+													fontSize:
+														getWidthnHeight(5)
+															.width,
+												},
+											]}
+										>
+											{neighborhood}
+										</Text>
+										<Text
+											style={[
+												styles.addressText,
+												{
+													paddingRight:
+														getWidthnHeight(6)
+															.width,
+												},
+											]}
+										>
+											{newAddress.address}
+										</Text>
+									</React.Fragment>
+								) : (
+									<SkeletonPlaceholder borderRadius={5}>
+										<React.Fragment>
+											<View
+												style={
+													styles.addressLabelSkeleton
+												}
+											/>
+											<View
+												style={
+													styles.addressTextSkeleton
+												}
+											/>
+										</React.Fragment>
+									</SkeletonPlaceholder>
+								)}
 							</View>
 						</View>
-						{fromAddressScreen && address ? (
+						{fromAddressScreen ? (
 							<Button
 								mode='contained'
 								style={[
@@ -679,6 +804,7 @@ const LocationScreen: React.FC<
 				handleContentLayout={handleContentLayout}
 				onChange={handleSheetChanges}
 				customHandle={customBottomSheet}
+				buttonOnpress={() => saveAddress()}
 			/>
 		</View>
 	);
@@ -690,18 +816,36 @@ const styles = StyleSheet.create({
 		marginHorizontal: getWidthnHeight(5).width,
 		zIndex: 999,
 	},
+	backButton: {
+		borderRadius: 50,
+		backgroundColor: colors.primaryRed,
+		width: getWidthnHeight(11).width,
+		height: getWidthnHeight(11).width,
+		justifyContent: 'center',
+		alignSelf: 'center',
+	},
 	markerFixed: {
 		position: 'absolute',
 		backgroundColor: colors.lightBlack,
-		paddingVertical: getWidthnHeight(2.2).width,
-		paddingHorizontal: getWidthnHeight(4).width,
-		marginHorizontal: getWidthnHeight(4).width,
 		borderRadius: 9,
 		bottom: '51%',
+		zIndex: 2,
+		width: getWidthnHeight(84).width,
+		height: getWidthnHeight(20).width,
+	},
+	markerTextContainer: {
+		paddingVertical: getWidthnHeight(2.2).width,
+		paddingHorizontal: getWidthnHeight(4).width,
 	},
 	markerText: {
 		color: 'white',
 		fontSize: getWidthnHeight(3.7).width,
+	},
+	markerTriangle: {
+		position: 'absolute',
+		borderRadius: 9,
+		bottom: '50%',
+		left: getWidthnHeight(48).width,
 	},
 	TriangleShapeCSS: {
 		width: 0,
@@ -714,6 +858,24 @@ const styles = StyleSheet.create({
 		borderLeftColor: 'transparent',
 		borderRightColor: 'transparent',
 		borderTopColor: colors.lightBlack,
+		zIndex: 1,
+	},
+	markerSkeleton: {
+		width: getWidthnHeight(84).width,
+		height: getWidthnHeight(20).width,
+		paddingHorizontal: getWidthnHeight(4).width,
+	},
+	markerSkeletonOne: {
+		width: getWidthnHeight(30).width,
+		height: getWidthnHeight(5).width,
+		marginBottom: getWidthnHeight(2.5).width,
+		marginTop: -getWidthnHeight(16.5).width,
+		marginLeft: getWidthnHeight(4).width,
+	},
+	markerSkeletonTwo: {
+		width: getWidthnHeight(70).width,
+		height: getWidthnHeight(5).width,
+		marginLeft: getWidthnHeight(4).width,
 	},
 	bottomBox: {
 		backgroundColor: 'white',
@@ -722,6 +884,16 @@ const styles = StyleSheet.create({
 	addressText: {
 		color: 'black',
 		fontSize: getWidthnHeight(3.5).width,
+	},
+	addressLabelSkeleton: {
+		width: getWidthnHeight(30).width,
+		height: getWidthnHeight(5).width,
+		marginBottom: getWidthnHeight(3).width,
+	},
+	addressTextSkeleton: {
+		width: getWidthnHeight(70).width,
+		height: getWidthnHeight(5).width,
+		marginBottom: getWidthnHeight(3).width,
 	},
 	btnText: {
 		fontSize: getWidthnHeight(4).width,

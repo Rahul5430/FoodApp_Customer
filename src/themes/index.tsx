@@ -19,6 +19,7 @@ export const colors = {
 	pink: '#FFC0CB',
 	orange: '#FFA500',
 	lightBlack: '#343A40',
+	placeholderGrey: '#D9D9D9',
 };
 
 export const fonts = {

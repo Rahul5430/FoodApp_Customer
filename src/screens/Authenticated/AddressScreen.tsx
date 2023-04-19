@@ -18,6 +18,8 @@ const AddressScreen: React.FC<
 			label: 'Home',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			floor: '',
+			landmark: '',
 			coords: {
 				latitude: 30.709597189331838,
 				longitude: 76.68947006872848,
@@ -30,6 +32,8 @@ const AddressScreen: React.FC<
 			label: 'Work',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			floor: '',
+			landmark: '',
 			coords: {
 				latitude: 30.709597189331838,
 				longitude: 76.68947006872848,
@@ -42,6 +46,8 @@ const AddressScreen: React.FC<
 			label: 'Home',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			floor: '',
+			landmark: '',
 			coords: {
 				latitude: 30.709597189331838,
 				longitude: 76.68947006872848,
@@ -54,6 +60,8 @@ const AddressScreen: React.FC<
 			label: 'Work',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			floor: '',
+			landmark: '',
 			coords: {
 				latitude: 30.709597189331838,
 				longitude: 76.68947006872848,
@@ -63,9 +71,11 @@ const AddressScreen: React.FC<
 		},
 		{
 			id: 'Other-1',
-			label: 'Other',
+			label: 'Club',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			floor: '',
+			landmark: '',
 			coords: {
 				latitude: 30.709597189331838,
 				longitude: 76.68947006872848,
@@ -78,6 +88,8 @@ const AddressScreen: React.FC<
 			label: 'Home',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			floor: '',
+			landmark: '',
 			coords: {
 				latitude: 30.709597189331838,
 				longitude: 76.68947006872848,
@@ -90,6 +102,8 @@ const AddressScreen: React.FC<
 			label: 'Work',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			floor: '',
+			landmark: '',
 			coords: {
 				latitude: 30.709597189331838,
 				longitude: 76.68947006872848,
@@ -99,9 +113,11 @@ const AddressScreen: React.FC<
 		},
 		{
 			id: 'Other-2',
-			label: 'Other',
+			label: 'School',
 			address:
 				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
+			floor: '',
+			landmark: '',
 			coords: {
 				latitude: 30.709597189331838,
 				longitude: 76.68947006872848,
