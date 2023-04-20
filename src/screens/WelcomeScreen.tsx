@@ -91,7 +91,10 @@ const WelcomeScreen = ({
 					});
 				} else {
 					setError({ ...error, name: '', email: '' });
-					navigation.navigate('LocationScreen');
+					navigation.navigate('LocationScreen', {
+						fromAddressScreen: false,
+						address: undefined,
+					});
 				}
 			} else {
 				setError({

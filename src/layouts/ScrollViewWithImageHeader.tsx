@@ -1,9 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
 	Animated,
 	ImageBackground,
 	KeyboardAvoidingView,
 	Platform,
+	Pressable,
 	ScrollView,
 	ScrollViewProps,
 	StatusBarProps,
@@ -16,6 +18,7 @@ import {
 } from 'react-native';
 import { Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Feather from 'react-native-vector-icons/Feather';
 
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import { getWidthnHeight } from '../helpers/responsiveFontSize';
@@ -29,6 +32,7 @@ type ScrollViewWithImageHeaderProps = {
 	containerStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
 	statusBarProps?: StatusBarProps;
 	scrollViewProps?: ScrollViewProps;
+	backButton?: boolean;
 };
 
 const ScrollViewWithImageHeader = ({
@@ -38,6 +42,7 @@ const ScrollViewWithImageHeader = ({
 	containerStyle,
 	statusBarProps,
 	scrollViewProps,
+	backButton = false,
 }: ScrollViewWithImageHeaderProps) => {
 	const screenWidth = getWidthnHeight(100).width;
 	const imageHeight = responsiveImageHeight(428, 237, screenWidth);
@@ -51,6 +56,8 @@ const ScrollViewWithImageHeader = ({
 				remainingHeight -
 				getWidthnHeight(100, 5, 'screen').height)
 	);
+
+	const navigation = useNavigation();
 
 	return (
 		<View style={{ flexGrow: 1 }}>
@@ -82,6 +89,22 @@ const ScrollViewWithImageHeader = ({
 							justifyContent: 'center',
 						}}
 					>
+						{backButton && (
+							<Pressable
+								onPress={() => navigation.goBack()}
+								style={{
+									position: 'absolute',
+									top: top + 10,
+									left: 10,
+								}}
+							>
+								<Feather
+									name='chevron-left'
+									color='white'
+									size={getWidthnHeight(10).width}
+								/>
+							</Pressable>
+						)}
 						<Text style={[styles.heading, titleStyle]}>
 							{title}
 						</Text>

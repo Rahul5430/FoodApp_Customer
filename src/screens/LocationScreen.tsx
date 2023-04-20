@@ -58,8 +58,8 @@ import {
 } from '../types/navigation';
 
 const LocationScreen: React.FC<
-	| WelcomeStackScreenProps<'LocationScreen'>
 	| AuthenticatedStackScreenProps<'LocationScreen'>
+	| WelcomeStackScreenProps<'LocationScreen'>
 > = ({ navigation, route }) => {
 	console.log(route);
 	const address = route.params?.address;

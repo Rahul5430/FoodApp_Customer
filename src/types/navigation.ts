@@ -19,6 +19,8 @@ export type MainStackParamList = {
 export type AuthenticatedStackParamList = {
 	Dashboard: undefined;
 	MyProfile: undefined;
+	MyDates: undefined;
+	AddDate: undefined;
 	AddressScreen: undefined;
 	LocationScreen: {
 		fromAddressScreen: boolean;
@@ -33,7 +35,10 @@ export type AuthenticatedStackScreenProps<
 
 export type WelcomeStackParamList = {
 	WelcomeScreen: undefined;
-	LocationScreen: undefined;
+	LocationScreen: {
+		fromAddressScreen: boolean;
+		address: Address | undefined;
+	};
 };
 
 export type WelcomeStackScreenProps<T extends keyof WelcomeStackParamList> =
