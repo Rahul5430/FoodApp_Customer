@@ -31,7 +31,7 @@ const MyProfile: React.FC<AuthenticatedStackScreenProps<'MyProfile'>> = ({
 				/>
 			),
 			name: 'Special Dates',
-			onPress: () => navigation.navigate('AddDate'),
+			onPress: () => navigation.navigate('MyDates'),
 		},
 		{
 			icon: (
