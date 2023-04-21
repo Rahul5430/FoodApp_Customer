@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { Chip } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import Celebrate from '../../assets/images/celebrate.png';
 import { getWidthnHeight } from '../../helpers/responsiveFontSize';
 import ScreenWithImageHeader from '../../layouts/ScreenWithImageHeader';
 import { colors, fonts } from '../../themes';
@@ -188,6 +189,10 @@ const MyDates: React.FC<AuthenticatedStackScreenProps<'MyDates'>> = () => {
 											</Text>
 										)}
 									</View>
+									<Image
+										source={Celebrate}
+										style={styles.rightImage}
+									/>
 								</View>
 							)}
 							showsVerticalScrollIndicator={false}
@@ -250,6 +255,10 @@ const styles = StyleSheet.create({
 		color: colors.primaryRed,
 		textAlignVertical: 'bottom',
 		paddingTop: getWidthnHeight(1).width,
+	},
+	rightImage: {
+		width: getWidthnHeight(8.9).width,
+		height: getWidthnHeight(8.9).width,
 	},
 });
 

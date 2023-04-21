@@ -20,9 +20,7 @@ type DetailsError = {
 
 const aspectRatio = getWidthnHeight().height / getWidthnHeight().width;
 let paddingOffset = 0;
-if (aspectRatio < 2) {
-	paddingOffset = 0;
-} else {
+if (aspectRatio > 2) {
 	paddingOffset = getWidthnHeight(1, 1).height;
 }
 
@@ -69,7 +67,7 @@ const AddDate: React.FC<AuthenticatedStackScreenProps<'AddDate'>> = ({
 				date: dateError ? 'Please choose date' : '',
 			});
 		} else {
-			navigation.navigate('MyProfile');
+			navigation.navigate('MyDates');
 		}
 	};
 
