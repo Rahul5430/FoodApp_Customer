@@ -7,7 +7,7 @@ export const colors = {
 	darkRed: '#6C001F',
 	lightInputGrey: '#919191',
 	secondaryButton: '#315991',
-	lightInput: '#F4F4F4',
+	lightInput: '#6C757D',
 	headerOrange: '#F37965',
 	lightGrey: '#D3D3D3',
 	grey: '#C0C0C0',

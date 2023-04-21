@@ -42,9 +42,7 @@ const MyProfile: React.FC<AuthenticatedStackScreenProps<'MyProfile'>> = ({
 				/>
 			),
 			name: 'My Orders',
-			onPress: () => {
-				console.log('Pressed My Orders');
-			},
+			onPress: () => navigation.navigate('MyOrders'),
 		},
 		{
 			icon: (

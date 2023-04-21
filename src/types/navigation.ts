@@ -21,6 +21,7 @@ export type AuthenticatedStackParamList = {
 	MyProfile: undefined;
 	MyDates: undefined;
 	AddDate: undefined;
+	MyOrders: undefined;
 	AddressScreen: undefined;
 	LocationScreen: {
 		fromAddressScreen: boolean;

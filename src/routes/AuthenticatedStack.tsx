@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddDate from '../screens/Authenticated/AddDate';
 import AddressScreen from '../screens/Authenticated/AddressScreen';
 import MyDates from '../screens/Authenticated/MyDates';
+import MyOrders from '../screens/Authenticated/MyOrders';
 import MyProfile from '../screens/Authenticated/MyProfile';
 import PaymentsScreen from '../screens/Authenticated/PaymentsScreen';
 import LocationScreen from '../screens/LocationScreen';
@@ -16,6 +17,7 @@ const AuthenticatedStack = () => {
 			<Stack.Screen name='MyProfile' component={MyProfile} />
 			<Stack.Screen name='MyDates' component={MyDates} />
 			<Stack.Screen name='AddDate' component={AddDate} />
+			<Stack.Screen name='MyOrders' component={MyOrders} />
 			<Stack.Screen name='AddressScreen' component={AddressScreen} />
 			<Stack.Screen
 				name='LocationScreen'
