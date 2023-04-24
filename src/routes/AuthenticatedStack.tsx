@@ -8,12 +8,14 @@ import MyProfile from '../screens/Authenticated/MyProfile';
 import PaymentsScreen from '../screens/Authenticated/PaymentsScreen';
 import LocationScreen from '../screens/LocationScreen';
 import { AuthenticatedStackParamList } from '../types/navigation';
+import TabNavigator from './TabNavigator';
 
 const Stack = createNativeStackNavigator<AuthenticatedStackParamList>();
 
 const AuthenticatedStack = () => {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: false }}>
+			<Stack.Screen name='Dashboard' component={TabNavigator} />
 			<Stack.Screen name='MyProfile' component={MyProfile} />
 			<Stack.Screen name='MyDates' component={MyDates} />
 			<Stack.Screen name='AddDate' component={AddDate} />

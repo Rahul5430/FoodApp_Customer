@@ -1,3 +1,4 @@
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Region } from 'react-native-maps';
 
@@ -33,6 +34,17 @@ export type AuthenticatedStackParamList = {
 export type AuthenticatedStackScreenProps<
 	T extends keyof AuthenticatedStackParamList
 > = NativeStackScreenProps<AuthenticatedStackParamList, T>;
+
+export type DashboardTabParamList = {
+	HomeScreen: undefined;
+	SearchScreen: undefined;
+	MyCartScreen: undefined;
+	MyOrders: undefined;
+	MyProfile: undefined;
+};
+
+export type DashboardTabScreenProps<T extends keyof DashboardTabParamList> =
+	BottomTabScreenProps<DashboardTabParamList, T>;
 
 export type WelcomeStackParamList = {
 	WelcomeScreen: undefined;
