@@ -1,4 +1,18 @@
+import React from 'react';
 import { Dimensions, Platform } from 'react-native';
+
+/**
+ * Returns true if the contrast ratio is greater than 186
+ *
+ * @param color color in rgb format
+ */
+export const checkContrast = (color: string) => {
+	const rgb = color.replace(/^rgba?\(|\s+|\)$/g, '').split(',');
+	const red = parseFloat(rgb[0]);
+	const green = parseFloat(rgb[1]);
+	const blue = parseFloat(rgb[2]);
+	return red * 0.299 + green * 0.587 + blue * 0.114 > 186;
+};
 
 /**
  * Returns true if the screen is in portrait mode
@@ -14,6 +28,18 @@ export const isPortrait = () => {
 export const isLandscape = () => {
 	const dim = Dimensions.get('screen');
 	return dim.width >= dim.height;
+};
+
+/**
+ * Gets only the valid children of a component,
+ * and ignores any nullish or falsy child.
+ *
+ * @param children the children
+ */
+export const getValidChildren = (children: React.ReactNode) => {
+	return React.Children.toArray(children).filter((child) =>
+		React.isValidElement(child)
+	) as React.ReactElement[];
 };
 
 export const isIOS = () => {

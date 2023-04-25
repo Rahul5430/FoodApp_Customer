@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.bgGrey,
 		borderBottomLeftRadius: 9,
 		borderBottomRightRadius: 9,
+		// borderRadius: 9,
 	},
 	iconContainer: {
 		borderRadius: 50,

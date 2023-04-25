@@ -17,20 +17,42 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 
+import Bread from '../../assets/images/bread.png';
+import Cake from '../../assets/images/cake.png';
 import Cake1 from '../../assets/images/cakes/cake1.webp';
 import Cake2 from '../../assets/images/cakes/cake2.webp';
 import Cake3 from '../../assets/images/cakes/cake3.webp';
 import Cake4 from '../../assets/images/cakes/cake4.webp';
+import ChocolateCake1 from '../../assets/images/cakes/chocolate_cake1.png';
+import ChocolateCake2 from '../../assets/images/cakes/chocolate_cake2.png';
+import PineappleCake from '../../assets/images/cakes/pineapple_cake.png';
 import CartoonUser from '../../assets/images/cartoonuser.png';
+import Cookies from '../../assets/images/cookies.png';
+import Muffin from '../../assets/images/muffin.png';
+import Pudding from '../../assets/images/pudding.png';
+import FadeInOutCarousel from '../../components/FadeInOutCarousel';
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
 import {
 	getWidthnHeight,
 	responsiveFontSize,
 } from '../../helpers/responsiveFontSize';
+import { responsiveImageHeight } from '../../helpers/responsiveImageSize';
 import { colors, fonts } from '../../themes';
 import { DashboardTabScreenProps } from '../../types/navigation';
 
-type TrendingProduct = {
+export type CarouselType = {
+	image: ImageSourcePropType;
+	bg: string;
+	description: string;
+};
+
+type CategoryType = {
+	name: string;
+	bg: string;
+	image: ImageSourcePropType;
+};
+
+type TrendingProductType = {
 	image: ImageSourcePropType;
 	name: string;
 	location: string;
@@ -42,18 +64,64 @@ type TrendingProduct = {
 type Data =
 	| {
 			label: 'Carousel';
-			data: [];
+			data: CarouselType[];
 	  }
 	| {
 			label: 'Category';
-			data: [];
+			data: CategoryType[];
 	  }
 	| {
 			label: 'Trending Product';
-			data: TrendingProduct[];
+			data: TrendingProductType[];
 	  };
 
-const trendingProductData: TrendingProduct[] = [
+const carouselData: CarouselType[] = [
+	{
+		image: PineappleCake,
+		bg: 'rgb(255, 218, 124)',
+		description: 'Pineapple Cake Collection 60% OFF',
+	},
+	{
+		image: ChocolateCake2,
+		bg: 'rgb(255, 22, 71)',
+		description: 'Chocolate Cake Collection 60% OFF',
+	},
+	{
+		image: ChocolateCake1,
+		bg: 'rgb(238, 232, 219)',
+		description: 'Chocolate Cake Collection 50% OFF',
+	},
+];
+
+const categoryData: CategoryType[] = [
+	{
+		name: 'Bread',
+		bg: '#71C0A3',
+		image: Bread,
+	},
+	{
+		name: 'Cake',
+		bg: '#FEBC02',
+		image: Cake,
+	},
+	{
+		name: 'Pudding',
+		bg: '#FC816F',
+		image: Pudding,
+	},
+	{
+		name: 'Muffin',
+		bg: '#A8D7F3',
+		image: Muffin,
+	},
+	{
+		name: 'Cookies',
+		bg: '#FF6988',
+		image: Cookies,
+	},
+];
+
+const trendingProductData: TrendingProductType[] = [
 	{
 		image: Cake1,
 		name: "Baker's in",
@@ -91,11 +159,11 @@ const trendingProductData: TrendingProduct[] = [
 const data: Data[] = [
 	{
 		label: 'Carousel',
-		data: [],
+		data: carouselData,
 	},
 	{
 		label: 'Category',
-		data: [],
+		data: categoryData,
 	},
 	{
 		label: 'Trending Product',
@@ -103,11 +171,36 @@ const data: Data[] = [
 	},
 ];
 
-const Categories = () => {
-	return <View></View>;
+const Categories = ({ product }: { product: CategoryType }) => {
+	const { height, width } = Image.resolveAssetSource(product.image);
+
+	return (
+		<View style={styles.categoryProductContainer}>
+			<View
+				style={[
+					styles.categoryProduct,
+					{ backgroundColor: product.bg },
+				]}
+			>
+				<Image
+					source={product.image}
+					style={{
+						width: getWidthnHeight(7).width,
+						height: responsiveImageHeight(
+							width,
+							height,
+							getWidthnHeight(7).width
+						),
+					}}
+					resizeMode='contain'
+				/>
+			</View>
+			<Text style={styles.categoryProductName}>{product.name}</Text>
+		</View>
+	);
 };
 
-const TrendingProduct = ({ product }: { product: TrendingProduct }) => {
+const TrendingProduct = ({ product }: { product: TrendingProductType }) => {
 	return (
 		<ImageBackground
 			source={product.image}
@@ -120,7 +213,7 @@ const TrendingProduct = ({ product }: { product: TrendingProduct }) => {
 					!product.offer && { justifyContent: 'flex-end' },
 				]}
 			>
-				{product.offer && (
+				{product.offer ? (
 					<View style={styles.offer}>
 						<MaterialCommunityIcons
 							name='water-percent'
@@ -129,7 +222,7 @@ const TrendingProduct = ({ product }: { product: TrendingProduct }) => {
 						/>
 						<Text style={styles.offerText}>{product.offer}</Text>
 					</View>
-				)}
+				) : null}
 				<FontAwesome
 					name={product.liked ? 'heart' : 'heart-o'}
 					color={product.liked ? colors.primaryRed : 'white'}
@@ -242,8 +335,39 @@ const HomeScreen: React.FC<DashboardTabScreenProps<'HomeScreen'>> = ({
 				data={data}
 				keyExtractor={(item) => item.label}
 				renderItem={({ item }) => (
-					<View style={styles.listItem}>
-						<Text style={styles.label}>{item.label}</Text>
+					<View>
+						{item.label !== 'Carousel' && (
+							<View style={styles.labelContainer}>
+								<Text style={styles.label}>{item.label}</Text>
+								{item.label === 'Category' && (
+									<Text style={styles.seeAll}>See All</Text>
+								)}
+							</View>
+						)}
+						{item.label === 'Carousel' && (
+							<FadeInOutCarousel data={item.data} />
+						)}
+						{item.label === 'Category' && (
+							<FlatList
+								data={item.data}
+								keyExtractor={(item) =>
+									`${item.name}-${item.bg}`
+								}
+								renderItem={(subItem) => (
+									<Categories product={subItem.item} />
+								)}
+								ItemSeparatorComponent={() => (
+									<View
+										style={{
+											marginHorizontal:
+												getWidthnHeight(2.5).width,
+										}}
+									/>
+								)}
+								horizontal
+								showsHorizontalScrollIndicator={false}
+							/>
+						)}
 						{item.label === 'Trending Product' && (
 							<FlatList
 								data={item.data}
@@ -297,11 +421,42 @@ const styles = StyleSheet.create({
 		height: getWidthnHeight(8).width,
 		marginBottom: getWidthnHeight(0.4).width,
 	},
+	labelContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
 	label: {
 		fontFamily: fonts.OxygenBold,
 		fontSize: responsiveFontSize(22),
+		color: 'black',
+		lineHeight: responsiveFontSize(23.67),
 	},
-	listItem: {},
+	seeAll: {
+		fontFamily: fonts.OxygenBold,
+		fontSize: responsiveFontSize(18),
+		color: colors.lightInput,
+		lineHeight: responsiveFontSize(23.67),
+	},
+	categoryProductContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingVertical: getWidthnHeight(3.312).width,
+	},
+	categoryProduct: {
+		width: getWidthnHeight(13).width,
+		height: getWidthnHeight(13).width,
+		borderRadius: 50,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	categoryProductName: {
+		fontFamily: fonts.OxygenBold,
+		fontSize: responsiveFontSize(18),
+		lineHeight: responsiveFontSize(23.67),
+		color: colors.lightInput,
+		marginTop: getWidthnHeight(1).width,
+	},
 	product: {
 		width: '100%',
 		height: getWidthnHeight(58).width,
@@ -339,11 +494,13 @@ const styles = StyleSheet.create({
 		paddingHorizontal: getWidthnHeight(5).width,
 	},
 	productName: {
+		color: 'black',
 		fontFamily: fonts.OxygenBold,
 		fontSize: responsiveFontSize(22),
 		lineHeight: responsiveFontSize(28),
 	},
 	productLoc: {
+		color: 'black',
 		fontFamily: fonts.OxygenBold,
 		fontSize: responsiveFontSize(16),
 		lineHeight: responsiveFontSize(21),
