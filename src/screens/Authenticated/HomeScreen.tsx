@@ -52,7 +52,7 @@ export type CarouselType = {
 	description: string;
 };
 
-type CategoryType = {
+export type CategoryType = {
 	name: string;
 	bg: string;
 	image: ImageSourcePropType;
@@ -99,7 +99,7 @@ const carouselData: CarouselType[] = [
 	},
 ];
 
-const categoryData: CategoryType[] = [
+export const categoryData: CategoryType[] = [
 	{
 		name: 'Bread',
 		bg: '#71C0A3',

@@ -72,10 +72,10 @@ const FadeInOutCarousel = ({ data }: FadeInOutCarouselProps) => {
 
 	useEffect(() => {
 		animatedBG.addListener(({ value }) => {
-			console.log(value);
+			// console.log(value);
 			const currentIndex =
 				Math.ceil(value) === numberOfItems ? 0 : Math.ceil(value);
-			console.log(currentIndex);
+			// console.log(currentIndex);
 			setCurrentIndex(currentIndex);
 			setDescription(data[currentIndex].description);
 			setImage(data[currentIndex].image);
