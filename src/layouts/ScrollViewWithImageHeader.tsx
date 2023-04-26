@@ -60,7 +60,7 @@ const ScrollViewWithImageHeader = ({
 	const navigation = useNavigation();
 
 	return (
-		<View style={{ flexGrow: 1 }}>
+		<View style={{ flexGrow: 1, backgroundColor: 'white' }}>
 			<FocusAwareStatusBar
 				barStyle='light-content'
 				translucent={true}

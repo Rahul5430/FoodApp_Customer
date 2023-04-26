@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import BottomSheet, {
 	BottomSheetTextInput,
-	TouchableOpacity,
 	useBottomSheetDynamicSnapPoints,
 } from '@gorhom/bottom-sheet';
 import { useFocusEffect } from '@react-navigation/native';
@@ -523,9 +522,7 @@ const PaymentsScreen: React.FC<
 			<View style={styles.addressBottomSheet}>
 				<Text style={styles.nickname}>Nickname for card</Text>
 				<View style={styles.chipContainer}>
-					<TouchableOpacity
-						onPress={() => setSelectedNickName('Personal')}
-					>
+					<Pressable onPress={() => setSelectedNickName('Personal')}>
 						<Text
 							style={[
 								styles.chip,
@@ -535,13 +532,8 @@ const PaymentsScreen: React.FC<
 						>
 							Personal
 						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={() => {
-							console.log(customBottomSheet);
-							setSelectedNickName('Business');
-						}}
-					>
+					</Pressable>
+					<Pressable onPress={() => setSelectedNickName('Business')}>
 						<Text
 							style={[
 								styles.chip,
@@ -551,10 +543,8 @@ const PaymentsScreen: React.FC<
 						>
 							Business
 						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={() => setSelectedNickName('Other')}
-					>
+					</Pressable>
+					<Pressable onPress={() => setSelectedNickName('Other')}>
 						<Text
 							style={[
 								styles.chip,
@@ -564,7 +554,7 @@ const PaymentsScreen: React.FC<
 						>
 							Other
 						</Text>
-					</TouchableOpacity>
+					</Pressable>
 				</View>
 				{selectedNickName === 'Other' && (
 					<BottomSheetTextInput

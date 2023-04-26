@@ -2,7 +2,6 @@
 import { GOOGLE_MAPS_API_KEY } from '@env';
 import BottomSheet, {
 	BottomSheetTextInput,
-	TouchableOpacity,
 	useBottomSheetDynamicSnapPoints,
 } from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -354,7 +353,7 @@ const LocationScreen: React.FC<
 			<View style={styles.addressBottomSheet}>
 				<Text style={styles.nickname}>Save adress as*</Text>
 				<View style={styles.chipContainer}>
-					<TouchableOpacity
+					<Pressable
 						onPress={() => {
 							setSelectedLabel('Home');
 							setNewAddress({ ...newAddress, label: 'Home' });
@@ -368,8 +367,8 @@ const LocationScreen: React.FC<
 						>
 							Home
 						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
+					</Pressable>
+					<Pressable
 						onPress={() => {
 							setSelectedLabel('Work');
 							setNewAddress({ ...newAddress, label: 'Work' });
@@ -383,8 +382,8 @@ const LocationScreen: React.FC<
 						>
 							Work
 						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
+					</Pressable>
+					<Pressable
 						onPress={() => {
 							setSelectedLabel('Other');
 							setNewAddress({
@@ -402,7 +401,7 @@ const LocationScreen: React.FC<
 						>
 							Other
 						</Text>
-					</TouchableOpacity>
+					</Pressable>
 				</View>
 				{selectedLabel === 'Other' && (
 					<BottomSheetTextInput
