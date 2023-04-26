@@ -62,6 +62,15 @@ const MyTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 				return <Octicons name='home' color='white' size={15} />;
 		}
 	};
+	const focusedOptions = descriptors[state.routes[state.index].key].options;
+
+	if (
+		focusedOptions.tabBarStyle &&
+		// @ts-expect-error Property 'display' does not exist on type 'RegisteredStyle<ViewStyle>'.
+		focusedOptions.tabBarStyle.display === 'none'
+	) {
+		return null;
+	}
 
 	return (
 		<View style={[styles.tabBar, { paddingBottom: bottom / 2 }]}>
@@ -136,7 +145,6 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.bgGrey,
 		borderBottomLeftRadius: 9,
 		borderBottomRightRadius: 9,
-		// borderRadius: 9,
 	},
 	iconContainer: {
 		borderRadius: 50,

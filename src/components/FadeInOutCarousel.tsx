@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Animated, Easing, Image, StyleSheet, View } from 'react-native';
+import { Animated, Easing, Image, StyleSheet } from 'react-native';
 
 import {
 	getWidthnHeight,
@@ -72,10 +72,7 @@ const FadeInOutCarousel = ({ data }: FadeInOutCarouselProps) => {
 
 	useEffect(() => {
 		animatedBG.addListener(({ value }) => {
-			// if (value < Math.ceil(value) && value > Math.ceil(value) - 0.5) {
 			console.log(value);
-			// }
-			// if (value % 1 === 0) {
 			const currentIndex =
 				Math.ceil(value) === numberOfItems ? 0 : Math.ceil(value);
 			console.log(currentIndex);
@@ -85,7 +82,6 @@ const FadeInOutCarousel = ({ data }: FadeInOutCarouselProps) => {
 			setImageResolvedAsset(
 				Image.resolveAssetSource(data[currentIndex].image)
 			);
-			// }
 		});
 
 		return () => animatedBG.removeAllListeners();

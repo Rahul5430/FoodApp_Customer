@@ -6,11 +6,16 @@ import MyCartScreen from '../screens/Authenticated/MyCartScreen';
 import MyOrders from '../screens/Authenticated/MyOrders';
 import MyProfile from '../screens/Authenticated/MyProfile';
 import SearchScreen from '../screens/Authenticated/SearchScreen';
-import { DashboardTabParamList } from '../types/navigation';
+import {
+	AuthenticatedStackScreenProps,
+	DashboardTabParamList,
+} from '../types/navigation';
 
 const Tab = createBottomTabNavigator<DashboardTabParamList>();
 
-const TabNavigator = () => {
+const TabNavigator: React.FC<
+	AuthenticatedStackScreenProps<'Dashboard'>
+> = () => {
 	return (
 		<Tab.Navigator
 			tabBar={(props) => <MyTabBar {...props} />}
@@ -34,12 +39,18 @@ const TabNavigator = () => {
 			<Tab.Screen
 				name='MyOrders'
 				component={MyOrders}
-				options={{ tabBarLabel: 'Orders' }}
+				options={{
+					tabBarLabel: 'Orders',
+					tabBarStyle: { display: 'none' },
+				}}
 			/>
 			<Tab.Screen
 				name='MyProfile'
 				component={MyProfile}
-				options={{ tabBarLabel: 'Profile' }}
+				options={{
+					tabBarLabel: 'Profile',
+					tabBarStyle: { display: 'none' },
+				}}
 			/>
 		</Tab.Navigator>
 	);

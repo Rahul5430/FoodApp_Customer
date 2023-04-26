@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useRef, useState } from 'react';
 import {
+	Animated,
+	Easing,
 	FlatList,
 	Image,
 	ImageBackground,
@@ -38,7 +41,10 @@ import {
 } from '../../helpers/responsiveFontSize';
 import { responsiveImageHeight } from '../../helpers/responsiveImageSize';
 import { colors, fonts } from '../../themes';
-import { DashboardTabScreenProps } from '../../types/navigation';
+import {
+	DashboardTabScreenProps,
+	HomeScreenNavigationProps,
+} from '../../types/navigation';
 
 export type CarouselType = {
 	image: ImageSourcePropType;
@@ -173,9 +179,13 @@ const data: Data[] = [
 
 const Categories = ({ product }: { product: CategoryType }) => {
 	const { height, width } = Image.resolveAssetSource(product.image);
+	const navigation = useNavigation<HomeScreenNavigationProps>();
 
 	return (
-		<View style={styles.categoryProductContainer}>
+		<Pressable
+			onPress={() => navigation.navigate('CategoryScreen')}
+			style={styles.categoryProductContainer}
+		>
 			<View
 				style={[
 					styles.categoryProduct,
@@ -196,38 +206,69 @@ const Categories = ({ product }: { product: CategoryType }) => {
 				/>
 			</View>
 			<Text style={styles.categoryProductName}>{product.name}</Text>
-		</View>
+		</Pressable>
 	);
 };
 
 const TrendingProduct = ({ product }: { product: TrendingProductType }) => {
+	const [isLiked, setIsLiked] = useState(product.liked);
+	const heartScale = useRef(new Animated.Value(1)).current;
+
+	const handleLike = () => {
+		setIsLiked(!isLiked);
+		Animated.timing(heartScale, {
+			toValue: isLiked ? 1 : 1.2,
+			duration: 200,
+			easing: Easing.linear,
+			useNativeDriver: true,
+		}).start();
+	};
+
 	return (
 		<ImageBackground
 			source={product.image}
 			style={styles.product}
 			imageStyle={{ borderRadius: 12 }}
 		>
-			<View
-				style={[
-					styles.productHeader,
-					!product.offer && { justifyContent: 'flex-end' },
-				]}
-			>
-				{product.offer ? (
-					<View style={styles.offer}>
-						<MaterialCommunityIcons
-							name='water-percent'
-							color='white'
-							size={responsiveFontSize(22)}
-						/>
-						<Text style={styles.offerText}>{product.offer}</Text>
-					</View>
-				) : null}
-				<FontAwesome
-					name={product.liked ? 'heart' : 'heart-o'}
-					color={product.liked ? colors.primaryRed : 'white'}
-					size={responsiveFontSize(22)}
-				/>
+			<View style={styles.overlay}>
+				<View
+					style={[
+						styles.productHeader,
+						!product.offer && { justifyContent: 'flex-end' },
+					]}
+				>
+					{product.offer ? (
+						<View style={styles.offer}>
+							<MaterialCommunityIcons
+								name='water-percent'
+								color='white'
+								size={responsiveFontSize(22)}
+							/>
+							<Text style={styles.offerText}>
+								{product.offer}
+							</Text>
+						</View>
+					) : null}
+					<Pressable onPress={handleLike}>
+						<Animated.View
+							style={{ transform: [{ scale: heartScale }] }}
+						>
+							{isLiked ? (
+								<FontAwesome
+									name='heart'
+									color={colors.primaryRed}
+									size={responsiveFontSize(22)}
+								/>
+							) : (
+								<FontAwesome
+									name='heart-o'
+									color={'white'}
+									size={responsiveFontSize(22)}
+								/>
+							)}
+						</Animated.View>
+					</Pressable>
+				</View>
 			</View>
 			<View style={styles.productDetails}>
 				<View
@@ -273,7 +314,7 @@ const HomeScreen: React.FC<DashboardTabScreenProps<'HomeScreen'>> = ({
 				<View style={styles.header}>
 					<FontAwesome5
 						name='map-marker-alt'
-						size={getWidthnHeight(10).width}
+						size={getWidthnHeight(9).width}
 						color={colors.black}
 					/>
 					<View
@@ -289,11 +330,17 @@ const HomeScreen: React.FC<DashboardTabScreenProps<'HomeScreen'>> = ({
 							]}
 						>
 							{'Phase 8B'}
-							<Entypo
-								name='chevron-down'
-								size={responsiveFontSize(22)}
-								color={'black'}
-							/>
+							<Pressable
+								onPress={() =>
+									navigation.navigate('AddressScreen')
+								}
+							>
+								<Entypo
+									name='chevron-down'
+									size={responsiveFontSize(22)}
+									color={'black'}
+								/>
+							</Pressable>
 						</Text>
 						<Text style={styles.addressText}>
 							{
@@ -340,7 +387,17 @@ const HomeScreen: React.FC<DashboardTabScreenProps<'HomeScreen'>> = ({
 							<View style={styles.labelContainer}>
 								<Text style={styles.label}>{item.label}</Text>
 								{item.label === 'Category' && (
-									<Text style={styles.seeAll}>See All</Text>
+									<Pressable
+										onPress={() =>
+											navigation.navigate(
+												'CategoryScreen'
+											)
+										}
+									>
+										<Text style={styles.seeAll}>
+											See All
+										</Text>
+									</Pressable>
 								)}
 							</View>
 						)}
@@ -461,7 +518,12 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: getWidthnHeight(58).width,
 		marginVertical: getWidthnHeight(2.5).width,
-		justifyContent: 'space-between',
+	},
+	overlay: {
+		flex: 1,
+		backgroundColor: 'rgba(0,0,0,0.41)',
+		borderTopLeftRadius: 12,
+		borderTopRightRadius: 12,
 	},
 	productHeader: {
 		flexDirection: 'row',

@@ -1,11 +1,14 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoadingScreen from '../screens/LoadingScreen';
-import { LoadingStackParamList } from '../types/navigation';
+import {
+	LoadingStackParamList,
+	MainStackScreenProps,
+} from '../types/navigation';
 
 const Stack = createNativeStackNavigator<LoadingStackParamList>();
 
-const LoadingNavigator = () => {
+const LoadingNavigator: React.FC<MainStackScreenProps<'LoadingStack'>> = () => {
 	return (
 		<Stack.Navigator
 			screenOptions={{

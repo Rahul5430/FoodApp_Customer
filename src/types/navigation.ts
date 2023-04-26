@@ -1,5 +1,18 @@
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+/* eslint-disable @typescript-eslint/no-empty-interface */
+/* eslint-disable @typescript-eslint/no-namespace */
+import {
+	BottomTabNavigationProp,
+	BottomTabScreenProps,
+} from '@react-navigation/bottom-tabs';
+import {
+	CompositeNavigationProp,
+	CompositeScreenProps,
+	NavigatorScreenParams,
+} from '@react-navigation/native';
+import type {
+	NativeStackNavigationProp,
+	NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import { Region } from 'react-native-maps';
 
 export type Address = {
@@ -17,8 +30,12 @@ export type MainStackParamList = {
 	LoadingStack: undefined;
 };
 
+export type MainStackScreenProps<T extends keyof MainStackParamList> =
+	NativeStackScreenProps<MainStackParamList, T>;
+
 export type AuthenticatedStackParamList = {
-	Dashboard: undefined;
+	Dashboard: NavigatorScreenParams<DashboardTabParamList>;
+	CategoryScreen: undefined;
 	MyProfile: undefined;
 	MyDates: undefined;
 	AddDate: undefined;
@@ -44,7 +61,15 @@ export type DashboardTabParamList = {
 };
 
 export type DashboardTabScreenProps<T extends keyof DashboardTabParamList> =
-	BottomTabScreenProps<DashboardTabParamList, T>;
+	CompositeScreenProps<
+		BottomTabScreenProps<DashboardTabParamList, T>,
+		AuthenticatedStackScreenProps<keyof AuthenticatedStackParamList>
+	>;
+
+export type HomeScreenNavigationProps = CompositeNavigationProp<
+	BottomTabNavigationProp<DashboardTabParamList, 'HomeScreen'>,
+	NativeStackNavigationProp<AuthenticatedStackParamList>
+>;
 
 export type WelcomeStackParamList = {
 	WelcomeScreen: undefined;
@@ -63,3 +88,9 @@ export type LoadingStackParamList = {
 
 export type LoadingStackScreenProps<T extends keyof LoadingStackParamList> =
 	NativeStackScreenProps<LoadingStackParamList, T>;
+
+declare global {
+	namespace ReactNavigation {
+		interface MainParamList extends MainStackParamList {}
+	}
+}

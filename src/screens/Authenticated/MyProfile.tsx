@@ -142,6 +142,7 @@ const MyProfile: React.FC<AuthenticatedStackScreenProps<'MyProfile'>> = ({
 					paddingBottom: getWidthnHeight(5).width,
 				},
 			]}
+			backButton={true}
 		>
 			<View
 				style={{

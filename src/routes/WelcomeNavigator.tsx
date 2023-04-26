@@ -2,11 +2,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LocationScreen from '../screens/LocationScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
-import { WelcomeStackParamList } from '../types/navigation';
+import {
+	MainStackScreenProps,
+	WelcomeStackParamList,
+} from '../types/navigation';
 
 const Stack = createNativeStackNavigator<WelcomeStackParamList>();
 
-const WelcomeNavigator = () => {
+const WelcomeNavigator: React.FC<MainStackScreenProps<'WelcomeStack'>> = () => {
 	return (
 		<Stack.Navigator
 			screenOptions={{
