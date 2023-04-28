@@ -33,26 +33,16 @@ export type WalletComponentType = {
 	setPhoneNumber: (phoneNumber: string) => void;
 } & CommonTypes;
 
-export type PaymentCardType<T extends 'Cards'> = {
-	heading: T;
-	data: CardsType[];
-};
-
-export type PaymentUPIType<T extends 'UPI'> = {
-	heading: T;
-	data: UPIType[];
-};
-
-export type PaymentWalletType<T extends 'Wallets'> = {
-	heading: T;
-	data: WalletsType[];
-};
-
-export type PaymentsDataType<T extends 'Cards' | 'UPI' | 'Wallets'> =
-	T extends 'Cards'
-		? PaymentCardType<T>
-		: T extends 'UPI'
-		? PaymentUPIType<T>
-		: T extends 'Wallets'
-		? PaymentWalletType<T>
-		: null;
+export type PaymentsDataType =
+	| {
+			heading: 'Cards';
+			data: CardsType[];
+	  }
+	| {
+			heading: 'UPI';
+			data: UPIType[];
+	  }
+	| {
+			heading: 'Wallets';
+			data: WalletsType[];
+	  };

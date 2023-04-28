@@ -4,17 +4,12 @@ import { Chip } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Celebrate from '../../assets/images/celebrate.png';
+import { myDatesData } from '../../data/user';
 import { getWidthnHeight } from '../../helpers/responsiveFontSize';
 import ScreenWithImageHeader from '../../layouts/ScreenWithImageHeader';
 import { colors, fonts } from '../../themes';
 import { AuthenticatedStackScreenProps } from '../../types/navigation';
-
-type ChipType = 'All' | 'Birthday' | 'Engagement' | 'Wedding' | 'Anniversary';
-
-type MyDatesDataType = {
-	occassion: ChipType;
-	data: Array<{ name: string; date: string }>;
-};
+import { ChipType, MyDatesDataType } from '../../types/user';
 
 const chipsData: ChipType[] = [
 	'All',
@@ -22,49 +17,6 @@ const chipsData: ChipType[] = [
 	'Engagement',
 	'Wedding',
 	'Anniversary',
-];
-
-const myDatesData: MyDatesDataType[] = [
-	{
-		occassion: 'Birthday',
-		data: [
-			{
-				name: 'Manthan',
-				date: 'Turns 23!',
-			},
-			{
-				name: 'Rahul',
-				date: 'Turns 21!',
-			},
-		],
-	},
-	{
-		occassion: 'Engagement',
-		data: [
-			{
-				name: 'Manthan',
-				date: '11/02 - Turns 24!',
-			},
-		],
-	},
-	{
-		occassion: 'Wedding',
-		data: [
-			{
-				name: 'Manthan',
-				date: '11/02 - Turns 24!',
-			},
-		],
-	},
-	{
-		occassion: 'Anniversary',
-		data: [
-			{
-				name: 'Manthan',
-				date: '11/02 - Turns 24!',
-			},
-		],
-	},
 ];
 
 const MyDates: React.FC<AuthenticatedStackScreenProps<'MyDates'>> = () => {

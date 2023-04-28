@@ -5,7 +5,6 @@ import {
 	FlatList,
 	Image,
 	ImageBackground,
-	ImageSourcePropType,
 	Pressable,
 	StyleSheet,
 	Text,
@@ -22,35 +21,21 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import Cake1 from '../../assets/images/cakes/cake1.webp';
-import Cake2 from '../../assets/images/cakes/cake2.webp';
-import Cake3 from '../../assets/images/cakes/cake3.webp';
-import Cake4 from '../../assets/images/cakes/cake4.webp';
-import Cake5 from '../../assets/images/cakes/cake5.jpeg';
-import Cake6 from '../../assets/images/cakes/cake6.webp';
-import Cake7 from '../../assets/images/cakes/cake7.webp';
-import Cake8 from '../../assets/images/cakes/cake8.jpeg';
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
+import { categoryData, ProductData } from '../../data';
 import {
 	getWidthnHeight,
 	responsiveFontSize,
 } from '../../helpers/responsiveFontSize';
 import { responsiveImageHeight } from '../../helpers/responsiveImageSize';
 import { colors, fonts } from '../../themes';
+import { CategoryType, ProductType } from '../../types/data';
 import { AuthenticatedStackScreenProps } from '../../types/navigation';
-import { categoryData, CategoryType } from './HomeScreen';
 
 type FilterData = {
 	name: string;
 	icon?: string;
 	dropdown?: Array<string>;
-};
-
-type ProductType = {
-	image: ImageSourcePropType;
-	name: string;
-	price: string;
-	liked: boolean;
 };
 
 type Data =
@@ -81,57 +66,6 @@ const filterData: FilterData[] = [
 	{
 		name: 'More',
 		dropdown: [],
-	},
-];
-
-const ProductData: ProductType[] = [
-	{
-		image: Cake1,
-		name: 'Strawberry Cheesecake',
-		price: '920.00 for one',
-		liked: false,
-	},
-	{
-		image: Cake2,
-		name: 'Blueberry Cheesecake',
-		price: '850.00 for one',
-		liked: false,
-	},
-	{
-		image: Cake3,
-		name: 'Chocolate Mini Cake',
-		price: '230.00 for one',
-		liked: false,
-	},
-	{
-		image: Cake4,
-		name: 'Dry Cake',
-		price: '850.00 for one',
-		liked: false,
-	},
-	{
-		image: Cake5,
-		name: 'Doraemon Cake',
-		price: '350.00 for one',
-		liked: false,
-	},
-	{
-		image: Cake6,
-		name: 'Dry Fruit Cake',
-		price: '850.00 for one',
-		liked: false,
-	},
-	{
-		image: Cake7,
-		name: 'Batman Cake',
-		price: '1600.00 for one',
-		liked: false,
-	},
-	{
-		image: Cake8,
-		name: 'Red Velvet Cake',
-		price: '550.00 for one',
-		liked: false,
 	},
 ];
 

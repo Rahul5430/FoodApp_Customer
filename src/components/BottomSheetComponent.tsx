@@ -28,7 +28,7 @@ export interface CustomBottomSheetProps {
 interface BottomSheetComponentProps extends BottomSheetProps {
 	customHandle: CustomBottomSheetProps;
 	handleContentLayout: (event: LayoutChangeEvent) => void;
-	buttonOnpress: () => void;
+	buttonOnpress?: () => void;
 }
 
 const BottomSheetComponent = React.forwardRef<
@@ -127,7 +127,9 @@ const BottomSheetComponent = React.forwardRef<
 						}}
 						onPress={() => {
 							console.log('Verifying...');
-							buttonOnpress();
+							if (buttonOnpress) {
+								buttonOnpress();
+							}
 						}}
 						buttonColor={colors.primaryButton}
 						labelStyle={styles.btnText}

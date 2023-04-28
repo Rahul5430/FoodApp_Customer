@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import BottomSheet, {
 	BottomSheetTextInput,
 	useBottomSheetDynamicSnapPoints,
@@ -27,16 +26,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 
-import AmazonPeLogo from '../../assets/images/logos/amazonPayLogo.png';
-import MasterCardLogo from '../../assets/images/logos/mastercardLogo.png';
-import MasterCardText from '../../assets/images/logos/mastercardText.png';
-import PaytmLogo from '../../assets/images/logos/paytmLogo.png';
-import PhonePeLogo from '../../assets/images/logos/phonpeLogo.png';
-import VisaLogo from '../../assets/images/logos/visaLogo.png';
-import VisaText from '../../assets/images/logos/visaText.png';
 import BottomSheetComponent, {
 	CustomBottomSheetProps,
 } from '../../components/BottomSheetComponent';
+import { userCards, userUPIs, userWallets } from '../../data/user';
 import { getWidthnHeight } from '../../helpers/responsiveFontSize';
 import { responsiveImageHeight } from '../../helpers/responsiveImageSize';
 import { numberWithSpace } from '../../helpers/utils';
@@ -48,7 +41,6 @@ import {
 	PaymentsDataType,
 	UPIType,
 	WalletComponentType,
-	WalletsType,
 } from '../../types/payment';
 
 const Cards = ({ item }: { item: CardsType }) => {
@@ -349,7 +341,7 @@ const Wallets = React.forwardRef<BottomSheet, WalletComponentType>(
 							),
 							buttonText: 'Confirm and Pay',
 						});
-						// @ts-ignore
+						// @ts-expect-error Property 'current' does not exist on type
 						bottomSheetRef?.current?.snapToIndex(0);
 					}}
 				>
@@ -367,9 +359,7 @@ const Wallets = React.forwardRef<BottomSheet, WalletComponentType>(
 const PaymentsScreen: React.FC<
 	AuthenticatedStackScreenProps<'PaymentsScreen'>
 > = () => {
-	const [paymentsData, setPaymentsData] = useState<
-		PaymentsDataType<'Cards' | 'UPI' | 'Wallets'>[]
-	>([]);
+	const [paymentsData, setPaymentsData] = useState<PaymentsDataType[]>([]);
 	const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 	const [customBottomSheet, setCustomBottomSheet] =
 		useState<CustomBottomSheetProps>({
@@ -387,55 +377,6 @@ const PaymentsScreen: React.FC<
 	const [phoneNumber, setPhoneNumber] = useState('');
 
 	useEffect(() => {
-		const userCards: CardsType[] = [
-			{
-				name: 'Visa',
-				cardType: VisaText,
-				logo: VisaLogo,
-				number: '1234567891232345',
-			},
-			{
-				name: 'MasterCard',
-				cardType: MasterCardText,
-				logo: MasterCardLogo,
-				number: '1234567891232345',
-			},
-		];
-		const userUPIs: UPIType[] = [
-			{
-				name: 'Paytm UPI',
-				logo: PaytmLogo,
-				linked: true,
-			},
-			{
-				name: 'Phonepe',
-				logo: PhonePeLogo,
-				linked: true,
-			},
-		];
-		const userWallets: WalletsType[] = [
-			{
-				name: 'Phonepe',
-				logo: PhonePeLogo,
-				balance: '',
-				phoneNumber: '',
-				linked: false,
-			},
-			{
-				name: 'Paytm',
-				logo: PaytmLogo,
-				balance: '1500.60',
-				phoneNumber: '9889290880',
-				linked: true,
-			},
-			{
-				name: 'Amazon Pay',
-				logo: AmazonPeLogo,
-				balance: '',
-				phoneNumber: '',
-				linked: false,
-			},
-		];
 		setPaymentsData([
 			{ heading: 'Cards', data: userCards },
 			{ heading: 'UPI', data: userUPIs },
@@ -673,47 +614,100 @@ const PaymentsScreen: React.FC<
 									</Pressable>
 								)}
 							</View>
-							<FlatList
-								// @ts-ignore
-								data={item.data}
-								keyExtractor={(subItem) => subItem.name}
-								renderItem={(subItem) => {
-									return item.heading === 'Cards' ? (
-										<Cards item={subItem.item} />
-									) : item.heading === 'UPI' ? (
-										// @ts-ignore
-										<UPI item={subItem.item} />
-									) : (
-										<Wallets
-											ref={bottomSheetRef}
-											// @ts-ignore
-											item={subItem.item}
-											setCustomBottomSheet={
-												setCustomBottomSheet
-											}
-											phoneNumber={phoneNumber}
-											setPhoneNumber={setPhoneNumber}
+							{item.heading === 'Cards' && (
+								<FlatList
+									data={item.data}
+									keyExtractor={(subItem) => subItem.name}
+									renderItem={(subItem) => {
+										return <Cards item={subItem.item} />;
+									}}
+									ListHeaderComponent={() => (
+										<View
+											style={{
+												borderBottomColor:
+													colors.lightGrey,
+												borderBottomWidth: 1,
+											}}
 										/>
-									);
-								}}
-								ListHeaderComponent={() => (
-									<View
-										style={{
-											borderBottomColor: colors.lightGrey,
-											borderBottomWidth: 1,
-										}}
-									/>
-								)}
-								ItemSeparatorComponent={() => (
-									<View
-										style={{
-											borderBottomColor: colors.lightGrey,
-											borderBottomWidth: 1,
-										}}
-									/>
-								)}
-								showsVerticalScrollIndicator={false}
-							/>
+									)}
+									ItemSeparatorComponent={() => (
+										<View
+											style={{
+												borderBottomColor:
+													colors.lightGrey,
+												borderBottomWidth: 1,
+											}}
+										/>
+									)}
+									showsVerticalScrollIndicator={false}
+								/>
+							)}
+							{item.heading === 'UPI' && (
+								<FlatList
+									data={item.data}
+									keyExtractor={(subItem) => subItem.name}
+									renderItem={(subItem) => {
+										return <UPI item={subItem.item} />;
+									}}
+									ListHeaderComponent={() => (
+										<View
+											style={{
+												borderBottomColor:
+													colors.lightGrey,
+												borderBottomWidth: 1,
+											}}
+										/>
+									)}
+									ItemSeparatorComponent={() => (
+										<View
+											style={{
+												borderBottomColor:
+													colors.lightGrey,
+												borderBottomWidth: 1,
+											}}
+										/>
+									)}
+									showsVerticalScrollIndicator={false}
+								/>
+							)}
+							{item.heading === 'Wallets' && (
+								<FlatList
+									data={item.data}
+									keyExtractor={(subItem) => subItem.name}
+									renderItem={(subItem) => {
+										return (
+											<Wallets
+												ref={bottomSheetRef}
+												item={subItem.item}
+												setCustomBottomSheet={
+													setCustomBottomSheet
+												}
+												phoneNumber={phoneNumber}
+												setPhoneNumber={setPhoneNumber}
+											/>
+										);
+									}}
+									ListHeaderComponent={() => (
+										<View
+											style={{
+												borderBottomColor:
+													colors.lightGrey,
+												borderBottomWidth: 1,
+											}}
+										/>
+									)}
+									ItemSeparatorComponent={() => (
+										<View
+											style={{
+												borderBottomColor:
+													colors.lightGrey,
+												borderBottomWidth: 1,
+											}}
+										/>
+									)}
+									showsVerticalScrollIndicator={false}
+								/>
+							)}
 						</View>
 					)}
 					ListHeaderComponent={() => (
@@ -747,7 +741,7 @@ const PaymentsScreen: React.FC<
 					scrollEnabled
 				/>
 			</ScreenWithImageHeader>
-			{/* @ts-ignore */}
+			{/* @ts-expect-error Property 'children' is missing in type */}
 			<BottomSheetComponent
 				ref={bottomSheetRef}
 				snapPoints={animatedSnapPoints}

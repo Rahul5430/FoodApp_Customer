@@ -4,133 +4,21 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import BakerLogo1 from '../../assets/images/bakerLogos/bakerLogo1.png';
-import BakerLogo2 from '../../assets/images/bakerLogos/bakerLogo2.png';
 import Ratings from '../../components/Ratings';
 import VegNonveg from '../../components/VegNonveg';
+import { ordersData, restaurantData } from '../../data/orders';
 import { getWidthnHeight } from '../../helpers/responsiveFontSize';
 import { responsiveImageHeight } from '../../helpers/responsiveImageSize';
 import ScreenWithImageHeader from '../../layouts/ScreenWithImageHeader';
 import { colors, fonts } from '../../themes';
+import { Order, Restaurant } from '../../types/data';
 import { AuthenticatedStackScreenProps } from '../../types/navigation';
 
-type Order = {
-	restaurantID: string;
-	items: Array<{
-		name: string;
-		quantity: string;
-		type: 'veg' | 'nonveg';
-	}>;
-	date: string;
-	amount: string;
-	status: 'Delivered' | 'Rejected';
-};
-
-type Restaurant = {
-	id: string;
-	name: string;
-	logo: any;
-	rating: string;
-	reviews: string;
-};
-
-const restaurantData: Restaurant[] = [
-	{
-		id: '1',
-		name: "Baker's in",
-		logo: BakerLogo2,
-		rating: '4.0',
-		reviews: '27.8K',
-	},
-	{
-		id: '2',
-		name: "Baker's in",
-		logo: BakerLogo1,
-		rating: '4.1',
-		reviews: '37.8K',
-	},
-];
-
-const ordersData: Order[] = [
-	{
-		restaurantID: '1',
-		items: [
-			{
-				name: 'Cupcakes',
-				quantity: '1',
-				type: 'veg',
-			},
-			{
-				name: 'Celebration Cupcakes',
-				quantity: '1',
-				type: 'veg',
-			},
-		],
-		date: '29 Mar 2023 at 4:14pm',
-		amount: '160.00',
-		status: 'Delivered',
-	},
-	{
-		restaurantID: '2',
-		items: [
-			{
-				name: 'Ice cream',
-				quantity: '2',
-				type: 'veg',
-			},
-			{
-				name: 'Vanilla Ice cream',
-				quantity: '2',
-				type: 'veg',
-			},
-		],
-		date: '21 Mar 2023 at 2:14pm',
-		amount: '190.00',
-		status: 'Rejected',
-	},
-	{
-		restaurantID: '1',
-		items: [
-			{
-				name: 'Cupcakes',
-				quantity: '1',
-				type: 'veg',
-			},
-			{
-				name: 'Celebration Cupcakes',
-				quantity: '1',
-				type: 'veg',
-			},
-		],
-		date: '29 Mar 2023 at 4:14pm',
-		amount: '160.00',
-		status: 'Delivered',
-	},
-	{
-		restaurantID: '2',
-		items: [
-			{
-				name: 'Ice cream',
-				quantity: '2',
-				type: 'veg',
-			},
-			{
-				name: 'Vanilla Ice cream',
-				quantity: '2',
-				type: 'veg',
-			},
-		],
-		date: '21 Mar 2023 at 2:14pm',
-		amount: '190.00',
-		status: 'Rejected',
-	},
-];
-
 const OrderCard = ({ order }: { order: Order }) => {
-	const { height, width } = Image.resolveAssetSource(BakerLogo2);
 	const restaurant = restaurantData.find(
 		(item) => item.id === order.restaurantID
 	) as Restaurant;
+	const { height, width } = Image.resolveAssetSource(restaurant.logo);
 
 	return (
 		<View style={styles.orderCard}>

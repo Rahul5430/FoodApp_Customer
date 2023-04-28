@@ -6,7 +6,6 @@ import {
 	FlatList,
 	Image,
 	ImageBackground,
-	ImageSourcePropType,
 	Pressable,
 	StyleSheet,
 	Text,
@@ -20,21 +19,10 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 
-import Bread from '../../assets/images/bread.png';
-import Cake from '../../assets/images/cake.png';
-import Cake1 from '../../assets/images/cakes/cake1.webp';
-import Cake2 from '../../assets/images/cakes/cake2.webp';
-import Cake3 from '../../assets/images/cakes/cake3.webp';
-import Cake4 from '../../assets/images/cakes/cake4.webp';
-import ChocolateCake1 from '../../assets/images/cakes/chocolate_cake1.png';
-import ChocolateCake2 from '../../assets/images/cakes/chocolate_cake2.png';
-import PineappleCake from '../../assets/images/cakes/pineapple_cake.png';
 import CartoonUser from '../../assets/images/cartoonuser.png';
-import Cookies from '../../assets/images/cookies.png';
-import Muffin from '../../assets/images/muffin.png';
-import Pudding from '../../assets/images/pudding.png';
 import FadeInOutCarousel from '../../components/FadeInOutCarousel';
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
+import { carouselData, categoryData, trendingProductData } from '../../data';
 import {
 	getWidthnHeight,
 	responsiveFontSize,
@@ -42,30 +30,14 @@ import {
 import { responsiveImageHeight } from '../../helpers/responsiveImageSize';
 import { colors, fonts } from '../../themes';
 import {
+	CarouselType,
+	CategoryType,
+	TrendingProductType,
+} from '../../types/data';
+import {
 	DashboardTabScreenProps,
 	HomeScreenNavigationProps,
 } from '../../types/navigation';
-
-export type CarouselType = {
-	image: ImageSourcePropType;
-	bg: string;
-	description: string;
-};
-
-export type CategoryType = {
-	name: string;
-	bg: string;
-	image: ImageSourcePropType;
-};
-
-type TrendingProductType = {
-	image: ImageSourcePropType;
-	name: string;
-	location: string;
-	rating: string;
-	offer: string;
-	liked: boolean;
-};
 
 type Data =
 	| {
@@ -80,87 +52,6 @@ type Data =
 			label: 'Trending Product';
 			data: TrendingProductType[];
 	  };
-
-const carouselData: CarouselType[] = [
-	{
-		image: PineappleCake,
-		bg: 'rgb(255, 218, 124)',
-		description: 'Pineapple Cake Collection 60% OFF',
-	},
-	{
-		image: ChocolateCake2,
-		bg: 'rgb(255, 22, 71)',
-		description: 'Chocolate Cake Collection 60% OFF',
-	},
-	{
-		image: ChocolateCake1,
-		bg: 'rgb(238, 232, 219)',
-		description: 'Chocolate Cake Collection 50% OFF',
-	},
-];
-
-export const categoryData: CategoryType[] = [
-	{
-		name: 'Bread',
-		bg: '#71C0A3',
-		image: Bread,
-	},
-	{
-		name: 'Cake',
-		bg: '#FEBC02',
-		image: Cake,
-	},
-	{
-		name: 'Pudding',
-		bg: '#FC816F',
-		image: Pudding,
-	},
-	{
-		name: 'Muffin',
-		bg: '#A8D7F3',
-		image: Muffin,
-	},
-	{
-		name: 'Cookies',
-		bg: '#FF6988',
-		image: Cookies,
-	},
-];
-
-const trendingProductData: TrendingProductType[] = [
-	{
-		image: Cake1,
-		name: "Baker's in",
-		location: 'Sahibzada Ajit Singh Nagar',
-		rating: '4.1',
-		offer: 'Flat \u20B9125 Off above \u20B9249',
-		liked: false,
-	},
-	{
-		image: Cake2,
-		name: "Baker's in",
-		location: 'Sahibzada Ajit Singh Nagar',
-		rating: '3.2',
-		offer: '',
-		liked: false,
-	},
-	{
-		image: Cake3,
-		name: "Baker's in",
-		location: 'Sahibzada Ajit Singh Nagar',
-		rating: '5.0',
-		offer: '',
-		liked: false,
-	},
-	{
-		image: Cake4,
-		name: "Baker's in",
-		location: 'Sahibzada Ajit Singh Nagar',
-		rating: '4.2',
-		offer: '',
-		liked: false,
-	},
-];
 
 const data: Data[] = [
 	{

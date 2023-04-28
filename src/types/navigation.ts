@@ -13,16 +13,8 @@ import type {
 	NativeStackNavigationProp,
 	NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { Region } from 'react-native-maps';
 
-export type Address = {
-	id: string;
-	label: string;
-	address: string;
-	floor: string;
-	landmark: string;
-	coords: Region;
-};
+import { Address } from './user';
 
 export type MainStackParamList = {
 	AuthenticatedStack: undefined;

@@ -4,129 +4,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+import { addressData } from '../../data/user';
 import { getWidthnHeight } from '../../helpers/responsiveFontSize';
 import ScreenWithImageHeader from '../../layouts/ScreenWithImageHeader';
 import { colors, fonts } from '../../themes';
-import { Address, AuthenticatedStackScreenProps } from '../../types/navigation';
+import { AuthenticatedStackScreenProps } from '../../types/navigation';
 
 const AddressScreen: React.FC<
 	AuthenticatedStackScreenProps<'AddressScreen'>
 > = ({ navigation }) => {
-	const addressData: Address[] = [
-		{
-			id: 'Home-1',
-			label: 'Home',
-			address:
-				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
-			floor: '',
-			landmark: '',
-			coords: {
-				latitude: 30.709597189331838,
-				longitude: 76.68947006872848,
-				latitudeDelta: 0.015,
-				longitudeDelta: 0.0121,
-			},
-		},
-		{
-			id: 'Work-1',
-			label: 'Work',
-			address:
-				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
-			floor: '',
-			landmark: '',
-			coords: {
-				latitude: 30.709597189331838,
-				longitude: 76.68947006872848,
-				latitudeDelta: 0.015,
-				longitudeDelta: 0.0121,
-			},
-		},
-		{
-			id: 'Home-2',
-			label: 'Home',
-			address:
-				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
-			floor: '',
-			landmark: '',
-			coords: {
-				latitude: 30.709597189331838,
-				longitude: 76.68947006872848,
-				latitudeDelta: 0.015,
-				longitudeDelta: 0.0121,
-			},
-		},
-		{
-			id: 'Work-2',
-			label: 'Work',
-			address:
-				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
-			floor: '',
-			landmark: '',
-			coords: {
-				latitude: 30.709597189331838,
-				longitude: 76.68947006872848,
-				latitudeDelta: 0.015,
-				longitudeDelta: 0.0121,
-			},
-		},
-		{
-			id: 'Other-1',
-			label: 'Club',
-			address:
-				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
-			floor: '',
-			landmark: '',
-			coords: {
-				latitude: 30.709597189331838,
-				longitude: 76.68947006872848,
-				latitudeDelta: 0.015,
-				longitudeDelta: 0.0121,
-			},
-		},
-		{
-			id: 'Home-3',
-			label: 'Home',
-			address:
-				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
-			floor: '',
-			landmark: '',
-			coords: {
-				latitude: 30.709597189331838,
-				longitude: 76.68947006872848,
-				latitudeDelta: 0.015,
-				longitudeDelta: 0.0121,
-			},
-		},
-		{
-			id: 'Work-3',
-			label: 'Work',
-			address:
-				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
-			floor: '',
-			landmark: '',
-			coords: {
-				latitude: 30.709597189331838,
-				longitude: 76.68947006872848,
-				latitudeDelta: 0.015,
-				longitudeDelta: 0.0121,
-			},
-		},
-		{
-			id: 'Other-2',
-			label: 'School',
-			address:
-				'XEAM Tower, E-202, Sector 74 A, Industrial Area, Sector 74, Sahibzada Ajit Singh Nagar, Punjab, 160055',
-			floor: '',
-			landmark: '',
-			coords: {
-				latitude: 30.709597189331838,
-				longitude: 76.68947006872848,
-				latitudeDelta: 0.015,
-				longitudeDelta: 0.0121,
-			},
-		},
-	];
-
 	return (
 		<ScreenWithImageHeader
 			title='My Address'
