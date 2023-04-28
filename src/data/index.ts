@@ -104,51 +104,83 @@ export const trendingProductData: TrendingProductType[] = [
 
 export const ProductData: ProductType[] = [
 	{
+		restaurantID: '1',
 		image: Cake1,
 		name: 'Strawberry Cheesecake',
-		price: '920.00 for one',
+		price: '920.00',
 		liked: false,
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		preferences: ['Eggless'],
 	},
 	{
+		restaurantID: '1',
 		image: Cake2,
 		name: 'Blueberry Cheesecake',
-		price: '850.00 for one',
+		price: '850.00',
 		liked: false,
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		preferences: ['Eggless'],
 	},
 	{
+		restaurantID: '1',
 		image: Cake3,
 		name: 'Chocolate Mini Cake',
-		price: '230.00 for one',
+		price: '230.00',
 		liked: false,
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		preferences: ['Eggless'],
 	},
 	{
+		restaurantID: '1',
 		image: Cake4,
 		name: 'Dry Cake',
-		price: '850.00 for one',
+		price: '850.00',
 		liked: false,
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		preferences: ['Eggless'],
 	},
 	{
+		restaurantID: '1',
 		image: Cake5,
 		name: 'Doraemon Cake',
-		price: '350.00 for one',
+		price: '350.00',
 		liked: false,
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		preferences: ['Eggless'],
 	},
 	{
+		restaurantID: '1',
 		image: Cake6,
 		name: 'Dry Fruit Cake',
-		price: '850.00 for one',
+		price: '850.00',
 		liked: false,
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		preferences: ['Eggless'],
 	},
 	{
+		restaurantID: '1',
 		image: Cake7,
 		name: 'Batman Cake',
-		price: '1600.00 for one',
+		price: '1600.00',
 		liked: false,
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		preferences: ['Eggless'],
 	},
 	{
+		restaurantID: '1',
 		image: Cake8,
 		name: 'Red Velvet Cake',
-		price: '550.00 for one',
+		price: '550.00',
 		liked: false,
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		preferences: ['Eggless'],
 	},
 ];

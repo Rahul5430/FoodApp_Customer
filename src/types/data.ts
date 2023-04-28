@@ -22,10 +22,13 @@ export type TrendingProductType = {
 };
 
 export type ProductType = {
+	restaurantID: string;
 	image: ImageSourcePropType;
 	name: string;
 	price: string;
 	liked: boolean;
+	description: string;
+	preferences: Array<string>;
 };
 
 export type Order = {

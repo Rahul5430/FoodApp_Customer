@@ -20,6 +20,7 @@ export const colors = {
 	orange: '#FFA500',
 	lightBlack: '#343A40',
 	placeholderGrey: '#D9D9D9',
+	yellow: '#FFD600',
 };
 
 export const fonts = {

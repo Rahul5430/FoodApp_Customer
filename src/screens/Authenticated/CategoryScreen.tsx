@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useRef, useState } from 'react';
 import {
 	Animated,
@@ -30,7 +31,10 @@ import {
 import { responsiveImageHeight } from '../../helpers/responsiveImageSize';
 import { colors, fonts } from '../../themes';
 import { CategoryType, ProductType } from '../../types/data';
-import { AuthenticatedStackScreenProps } from '../../types/navigation';
+import {
+	AuthenticatedStackScreenProps,
+	DashboardNavigationProps,
+} from '../../types/navigation';
 
 type FilterData = {
 	name: string;
@@ -113,6 +117,8 @@ const Product = ({ product }: { product: ProductType }) => {
 	const [isLiked, setIsLiked] = useState(product.liked);
 	const heartScale = useRef(new Animated.Value(1)).current;
 
+	const navigation = useNavigation<DashboardNavigationProps<'HomeScreen'>>();
+
 	const handleLike = () => {
 		setIsLiked(!isLiked);
 		Animated.timing(heartScale, {
@@ -124,48 +130,54 @@ const Product = ({ product }: { product: ProductType }) => {
 	};
 
 	return (
-		<ImageBackground
-			source={product.image}
-			style={styles.product}
-			imageStyle={{ borderRadius: 12 }}
+		<Pressable
+			onPress={() =>
+				navigation.navigate('ProductScreen', { product: product })
+			}
 		>
-			<LinearGradient
-				colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,1)']}
-				start={{ x: 0, y: 0.3 }}
-				end={{ x: 0, y: 1 }}
-				style={styles.overlay}
+			<ImageBackground
+				source={product.image}
+				style={styles.product}
+				imageStyle={{ borderRadius: 12 }}
 			>
-				<View style={styles.productHeader}>
-					<Pressable onPress={handleLike}>
-						<Animated.View
-							style={{ transform: [{ scale: heartScale }] }}
-						>
-							{isLiked ? (
-								<FontAwesome
-									name='heart'
-									color={colors.primaryRed}
-									size={responsiveFontSize(22)}
-								/>
-							) : (
-								<FontAwesome
-									name='heart-o'
-									color={'white'}
-									size={responsiveFontSize(22)}
-								/>
-							)}
-						</Animated.View>
-					</Pressable>
-				</View>
-				<View style={styles.productDetails}>
-					<Text style={styles.productText} numberOfLines={1}>
-						{product.name}
-					</Text>
-					<Text style={styles.productText} numberOfLines={1}>
-						{product.price}
-					</Text>
-				</View>
-			</LinearGradient>
-		</ImageBackground>
+				<LinearGradient
+					colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,1)']}
+					start={{ x: 0, y: 0.3 }}
+					end={{ x: 0, y: 1 }}
+					style={styles.overlay}
+				>
+					<View style={styles.productHeader}>
+						<Pressable onPress={handleLike}>
+							<Animated.View
+								style={{ transform: [{ scale: heartScale }] }}
+							>
+								{isLiked ? (
+									<FontAwesome
+										name='heart'
+										color={colors.primaryRed}
+										size={responsiveFontSize(22)}
+									/>
+								) : (
+									<FontAwesome
+										name='heart-o'
+										color={'white'}
+										size={responsiveFontSize(22)}
+									/>
+								)}
+							</Animated.View>
+						</Pressable>
+					</View>
+					<View style={styles.productDetails}>
+						<Text style={styles.productText} numberOfLines={1}>
+							{product.name}
+						</Text>
+						<Text style={styles.productText} numberOfLines={1}>
+							{`${product.price} for one`}
+						</Text>
+					</View>
+				</LinearGradient>
+			</ImageBackground>
+		</Pressable>
 	);
 };
 

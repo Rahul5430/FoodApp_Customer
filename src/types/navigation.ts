@@ -14,6 +14,7 @@ import type {
 	NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 
+import { ProductType } from './data';
 import { Address } from './user';
 
 export type MainStackParamList = {
@@ -28,6 +29,7 @@ export type MainStackScreenProps<T extends keyof MainStackParamList> =
 export type AuthenticatedStackParamList = {
 	Dashboard: NavigatorScreenParams<DashboardTabParamList>;
 	CategoryScreen: undefined;
+	ProductScreen: { product: ProductType };
 	MyProfile: undefined;
 	MyDates: undefined;
 	AddDate: undefined;
@@ -58,10 +60,11 @@ export type DashboardTabScreenProps<T extends keyof DashboardTabParamList> =
 		AuthenticatedStackScreenProps<keyof AuthenticatedStackParamList>
 	>;
 
-export type HomeScreenNavigationProps = CompositeNavigationProp<
-	BottomTabNavigationProp<DashboardTabParamList, 'HomeScreen'>,
-	NativeStackNavigationProp<AuthenticatedStackParamList>
->;
+export type DashboardNavigationProps<T extends keyof DashboardTabParamList> =
+	CompositeNavigationProp<
+		BottomTabNavigationProp<DashboardTabParamList, T>,
+		NativeStackNavigationProp<AuthenticatedStackParamList>
+	>;
 
 export type WelcomeStackParamList = {
 	WelcomeScreen: undefined;

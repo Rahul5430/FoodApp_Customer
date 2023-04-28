@@ -35,8 +35,8 @@ import {
 	TrendingProductType,
 } from '../../types/data';
 import {
+	DashboardNavigationProps,
 	DashboardTabScreenProps,
-	HomeScreenNavigationProps,
 } from '../../types/navigation';
 
 type Data =
@@ -70,7 +70,7 @@ const data: Data[] = [
 
 const Categories = ({ product }: { product: CategoryType }) => {
 	const { height, width } = Image.resolveAssetSource(product.image);
-	const navigation = useNavigation<HomeScreenNavigationProps>();
+	const navigation = useNavigation<DashboardNavigationProps<'HomeScreen'>>();
 
 	return (
 		<Pressable
