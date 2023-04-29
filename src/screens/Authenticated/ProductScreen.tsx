@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Animated,
 	Easing,
@@ -47,6 +47,7 @@ const ProductScreen: React.FC<
 	const [quantity, setQuantity] = useState(0);
 
 	const heartScale = useRef(new Animated.Value(1)).current;
+	const imageScale = useRef(new Animated.Value(0.5)).current;
 
 	const restaurant = restaurantData.find(
 		(restaurant) => restaurant.id === product.restaurantID
@@ -92,6 +93,15 @@ const ProductScreen: React.FC<
 		}
 	};
 
+	useEffect(() => {
+		Animated.parallel([
+			Animated.timing(imageScale, {
+				toValue: 1,
+				useNativeDriver: true,
+			}),
+		]).start();
+	}, []);
+
 	return (
 		<SafeAreaView edges={['bottom', 'left', 'right']} style={styles.screen}>
 			<FocusAwareStatusBar
@@ -106,6 +116,7 @@ const ProductScreen: React.FC<
 					width: screenWidth,
 					height: screenWidth,
 				}}
+				blurRadius={5}
 			>
 				<LinearGradient
 					colors={['rgba(0,0,0,0.7)', 'rgba(0,0,0,0.2)']}
@@ -113,42 +124,72 @@ const ProductScreen: React.FC<
 					end={{ x: 0, y: 1 }}
 					style={styles.overlay}
 				>
-					<View style={[styles.imageHeader, { top: top }]}>
-						<Pressable
-							onPress={() => navigation.goBack()}
-							style={[styles.backButton]}
+					<Animated.View
+						style={{
+							transform: [{ scale: imageScale }],
+							zIndex: 1,
+						}}
+					>
+						<ImageBackground
+							source={product.image}
+							style={{
+								width: screenWidth,
+								height: screenWidth,
+							}}
 						>
-							<Feather
-								name='chevron-left'
-								color='white'
-								size={getWidthnHeight(10).width}
-							/>
-						</Pressable>
-						<Pressable onPress={handleLike}>
-							<Animated.View
-								style={{
-									transform: [{ scale: heartScale }],
-								}}
+							<LinearGradient
+								colors={['rgba(0,0,0,0.7)', 'rgba(0,0,0,0.2)']}
+								start={{ x: 0, y: 0 }}
+								end={{ x: 0, y: 1 }}
+								style={styles.overlay}
 							>
-								{isLiked ? (
-									<FontAwesome
-										name='heart'
-										color={colors.primaryRed}
-										size={responsiveFontSize(22)}
-									/>
-								) : (
-									<FontAwesome
-										name='heart-o'
-										color={'white'}
-										size={responsiveFontSize(22)}
-									/>
-								)}
-							</Animated.View>
-						</Pressable>
-					</View>
+								<View
+									style={[styles.imageHeader, { top: top }]}
+								>
+									<Pressable
+										onPress={() => navigation.goBack()}
+										style={[styles.backButton]}
+									>
+										<Feather
+											name='chevron-left'
+											color='white'
+											size={getWidthnHeight(10).width}
+										/>
+									</Pressable>
+									<Pressable onPress={handleLike}>
+										<Animated.View
+											style={{
+												transform: [
+													{ scale: heartScale },
+												],
+											}}
+										>
+											{isLiked ? (
+												<FontAwesome
+													name='heart'
+													color={colors.primaryRed}
+													size={responsiveFontSize(
+														22
+													)}
+												/>
+											) : (
+												<FontAwesome
+													name='heart-o'
+													color={'white'}
+													size={responsiveFontSize(
+														22
+													)}
+												/>
+											)}
+										</Animated.View>
+									</Pressable>
+								</View>
+							</LinearGradient>
+						</ImageBackground>
+					</Animated.View>
 				</LinearGradient>
 			</ImageBackground>
-			<View style={styles.product}>
+			<View style={[styles.product]}>
 				<Text style={styles.restaurantName}>{restaurant.name}</Text>
 				<Text style={styles.productName}>{product.name}</Text>
 				<View style={styles.reviewBox}>
@@ -251,11 +292,13 @@ const ProductScreen: React.FC<
 						setGradTop(nativeEvent.layout.y)
 					}
 				/>
-				<LinearGradient
-					colors={['rgba(255,255,255,1)', 'rgba(255,255,255,0)']}
-					style={[styles.scrollViewGradient, { top: gradTop }]}
-					pointerEvents='none'
-				/>
+				<View style={[styles.scrollViewGradient, { top: gradTop }]}>
+					<LinearGradient
+						colors={['rgba(255,255,255,1)', 'rgba(255,255,255,0)']}
+						style={[getWidthnHeight(90, 4)]}
+						pointerEvents='none'
+					/>
+				</View>
 				<ScrollView showsVerticalScrollIndicator={false}>
 					<View style={{ paddingTop: getWidthnHeight(5).width }}>
 						<Text style={styles.description}>
@@ -279,11 +322,15 @@ const ProductScreen: React.FC<
 						</View>
 					</View>
 				</ScrollView>
-				<LinearGradient
-					colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
+				<View
 					style={[styles.scrollViewGradient, { bottom: gradBottom }]}
-					pointerEvents='none'
-				/>
+				>
+					<LinearGradient
+						colors={['rgba(255,255,255,.4)', 'rgba(255,255,255,1)']}
+						style={[getWidthnHeight(90, 4)]}
+						pointerEvents='none'
+					/>
+				</View>
 				<View
 					style={styles.productBottom}
 					onLayout={({ nativeEvent }) =>
@@ -400,8 +447,6 @@ const styles = StyleSheet.create({
 	scrollViewGradient: {
 		position: 'absolute',
 		left: getWidthnHeight(5).width,
-		width: getWidthnHeight(90, 5).width,
-		height: getWidthnHeight(90, 4).height,
 		zIndex: 999,
 	},
 	productBottom: {
